@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="深度学习：GPU云服务器的租用, Yuri">
+    <meta name="keywords" content="深度学习：Pytorch训练数据时问题总结, Yuri">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>深度学习：GPU云服务器的租用 | Yuri</title>
+    <title>深度学习：Pytorch训练数据时问题总结 | Yuri</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/2.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">深度学习：GPU云服务器的租用</h1>
+                    <h1 class="description center-align post-title">深度学习：Pytorch训练数据时问题总结</h1>
                 </div>
             </div>
         </div>
@@ -435,12 +435,8 @@
                                 <span class="chip bg-color">深度学习</span>
                             </a>
                         
-                            <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-                                <span class="chip bg-color">云服务器</span>
-                            </a>
-                        
-                            <a href="/tags/GPU/">
-                                <span class="chip bg-color">GPU</span>
+                            <a href="/tags/Pytorch/">
+                                <span class="chip bg-color">Pytorch</span>
                             </a>
                         
                     </div>
@@ -478,7 +474,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1k
+                    1.1k
                 </div>
                 
 
@@ -500,10 +496,15 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文是在笔者做深度学习相关研究的时候需要高算力GPU去运行代码因而选择去租借GPU云服务器，这里记下自己所接触的一些GPU服务器网站和使用技巧</p>
-<h2 id="一、推荐站点"><a href="#一、推荐站点" class="headerlink" title="一、推荐站点"></a>一、推荐站点</h2><p>1、<a target="_blank" rel="noopener" href="https://cloud.videojj.com/">极链AI云</a>，首当其冲的一定是这家，这家是我用过认为较为好用而且相对价格比较平均然后操作方便，还有最重要的一点就是它微信注册绑定送100元，如果是学生再送100元，真的很爽，而且这家的GPU种类比较多，从RTX2080Ti，Tesla P100，Tesla T4，Ampere A100等，还是比较多的种类的<br>2、<a target="_blank" rel="noopener" href="https://www.1024gpu.top/home">1024Lab云</a>，这家的话服务器是架设在国外的，租用界面使用Github上一个开源的GPU租用界面，这家的话是所有租用平台上最便宜的但是它的种类比较少，最好的就只有2080Ti，最差的就是1080，但是2080Ti显卡的价格是0.215美刀/小时，真的是最便宜的了，其他国内平台像RTX2080Ti都是需要￥3/h左右的，但是这家有个缺点就是它的交易是通过网上货币DBC进行支付而且这家的话注册送的DBC不多只有1000DBC算比较少，只能用个几小时<br>3、<a target="_blank" rel="noopener" href="https://www.matpool.com/host-market">矩池云GPU</a>，这家的话做的会比较大，和很多的高校和公司都有过合作所以它的价格必然会高一些，但是这家在开始的时候会送5块钱的券，而且这家的话优点在于它可以VNC远程访问图形化桌面，操作简单，而且他家的GPU种类是真的很多啊<br>4、<a target="_blank" rel="noopener" href="https://www.easyaiforum.cn/">易学智能AI云</a>这家的特点是贵，个人感觉很贵，然后它的优点就是真的真的很好操作而且很人性化等等，具体我就不介绍了<br>5、<a target="_blank" rel="noopener" href="https://mistgpu.com/">MistGPU云</a>，这家的特点就是便宜了，注册送8块钱券，便宜的话就是差不多一个tesla P100只要4块钱/小时，邀请他人使用注册的会再送8块钱，无上限</p>
-<h2 id="二、GPU云服务器使用"><a href="#二、GPU云服务器使用" class="headerlink" title="二、GPU云服务器使用"></a>二、GPU云服务器使用</h2><p><strong>1、访问工具</strong><br>访问GPU云服务器的方式无非两种，一种是命令行shell访问另一种就是图形化界面访问，但是大多好像都是只提供shell命令行访问即终端访问，可能是在云服务器端要每个用户都配备图形化界面消耗的空间和功率更大吧<br>终端访问工具：Xshell（这是最常用的终端访问），Jupyter（也挺好用的），Xftp（主机和云服务器间进行FTP传输文件的工具）<br><img src="https://img-blog.csdnimg.cn/20201218222527832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="Xshel界面"><br><img src="https://img-blog.csdnimg.cn/20201218222626978.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图形化界面访问工具：Teamviewer（个人觉得挺好用的），向日葵，VNC，这些第三方软件都需要主机和云服务器都要安装相应软件才可以互相进行访问控制和文件传输<br><strong>2、使用方法</strong><br>这里将以极链云AI平台使用介绍，其实都大同小异的，主要访问工具是Xshell<br>（1）在极链云上选择服务器进行租用<br><img src="https://img-blog.csdnimg.cn/20201218223208129.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>（2）选择完成后系统产生GPU实例<br><img src="https://img-blog.csdnimg.cn/202012182234070.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20201218223434761.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>（3）打开Xshell软件进行配置连接<br><img src="https://img-blog.csdnimg.cn/20201218223550980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>在 新建会话属性 窗口填写自定义名称，主机 填写从控制台复制出的登录指令域名部分，端口号 填写 -p 后的数字<br><img src="https://img-blog.csdnimg.cn/20201218223610391.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>点击左侧类别中的 用户身份认证，右侧 用户名 填写 root，密码填写从控制台复制出的密码。确认保存<br><img src="https://img-blog.csdnimg.cn/2020121822364271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>打开并连接<br><img src="https://img-blog.csdnimg.cn/20201218223654658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20201218223718823.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20201218223729310.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>类似的Xftp也是相同的操作<br><strong>3、文件传输方法</strong><br>（1）使用各家平台的网盘进行传输，比如极链有提供自己的网盘，可以在启动服务器前先上传数据到网盘上，然后在机器对应的目录下去访问读取数据<br><img src="https://img-blog.csdnimg.cn/2020121822421112.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>（2）使用FTP传输文件，可以使用Xftp传输但是普遍速度很慢，也可以使用FileZilla，具体使用方法自行百度</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1]<a target="_blank" rel="noopener" href="https://cloud.videojj.com/help/docs/data_manage.html#id4">极链AI云帮助文档</a></p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文是在笔者使用Pytorch深度学习框架训练自己的网络时遇到的一些问题，在此一并记录下来作为学习笔记，本文中的问题主要是Pytorch框架上遇到的一些问题而非单独针对个人网络代码框架上的问题</p>
+<h2 id="问题一、"><a href="#问题一、" class="headerlink" title="问题一、"></a>问题一、</h2><p><strong>问题</strong>：在使用Pytorch加载训练好的模型文件checkpoint.tar或其它保存类型的模型文件时，如果遇到“xxxxx is a zip archive (did you mean to torch.jit.load()?)”，大概就是这样一回事<br><strong>分析</strong>：这里大概意思就是说你这个版本的Pytorch无法读入这个你这个在高版本运行出来保存的模型文件，在高版本的Pytorch的torch.save方法中已经把旧的保存的模型文件方法换成了一种新的基于zip的保存方法，而这时候你的旧版本Pytorch无法读入高版本产生的模型文件；特此说明，自从torch1.6及之后开始，Pytorch就更换了保存模型文件的方法，见下面官方图<br><img src="https://img-blog.csdnimg.cn/20201218210342460.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>解决方法</strong>：如果你坚持要用旧版的保存模型方法，OK可以，但是你得在torch.save后面加上_use_new_zipfile_serialization=False，意思就是不使用新的zip保存方法，比如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.save(model, _use_new_zipfile_serialization&#x3D;False)</span><br></pre></td></tr></table></figure>
+<h2 id="问题二"><a href="#问题二" class="headerlink" title="问题二"></a>问题二</h2><p><strong>问题</strong>：在训练模型的时候遇到RuntimeError:CUDA out of Memory等等，然后说allocate xxxx MB/GB （but xxxxxxx），总的来说就是你要训练的模型所需要的GPU显存空间不足<br><strong>分析</strong>：一般整个训练代码中，耗GPU内存最多的就是网络结构，而网络结构中最耗内存的就是参数和激活函数产生的中间变量等，当然还有可能是你的单个数据图像的过大或者你一次处理的batch_size太大<br><strong>解决方法</strong>：1、减小Batch_Size和数据大小  2、查看在测试数据部分的代码中是否加上with torch.no_grad表示在测试数据时不进行反向传播和梯度计算 3、在训练数据代码部分前加上释放GPU数据的代码</p>
+<h2 id="问题三"><a href="#问题三" class="headerlink" title="问题三"></a>问题三</h2><p><strong>问题</strong>：在命令行窗口下直接运行所要执行的代码即直接<code>python train.py</code>发生报错：ModuleNotFoundError，当让这种情况是在你train.py代码中还import了你自己写的其他py文件代码<br><strong>分析</strong>：在运行Python的IDE中如果直接运行代码文件，OK没问题那是因为在软件IDE条件下，软件会帮你把你一个文件夹下其他的代码文件的sys.path设置好加入进去，但是如果在命令行下面运行就不一样没人帮你做这件事情，在IDE中import都是相对路径而不是绝对路径因而我们要做的就是在执行代码的头部加上一段代码使得其他文件能够加入sys的path中，根据import的机制，代码就会相对应找到相应的包（import机制详情请自行搜索查询）<br><strong>解决方法</strong>：请在你要执行的代码最前面加上如下代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">import os</span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">       sys.path.append(os.path.dirname(sys.path[0]))</span><br></pre></td></tr></table></figure>
+<h2 id="问题四"><a href="#问题四" class="headerlink" title="问题四"></a>问题四</h2><p><strong>问题</strong>：运行测试数据代码的时候报错，RuntimeError: Attempting to deserialize object on CUDA device 2 but torch.cuda.device_count() is 1<br><strong>分析</strong>：大概就是说你训练的时候使用两个GPU训练但是现在你电脑只有一个GPU<br><strong>解决方法</strong>：在torch.load的时候后面加上map_location=’cuda:0’，比如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.load(args.load_model, map_location&#x3D;&#39;cuda:0&#39;)</span><br></pre></td></tr></table></figure>
+<h2 id="问题五"><a href="#问题五" class="headerlink" title="问题五"></a>问题五</h2><p><strong>问题</strong>：具体的内容我给忘记了没有记下来，但是是在测试数据集代码运行时报错，大概内容是测试数据的张量大小是三维不符合模型中的四维数据模型<br><strong>分析</strong>：在训练数据的时候数据都是以四维的形式即[batch, channel, H, W]输入进去，但是在测试数据的时候虽然输入的图像数据是三维的大小但是你需要同样的把它变换成四维数据<br><strong>解决方法</strong>：给输入数据加上unsqueeze即<code>input_data = input_data.unsqueeze(0)</code>，0就是在第一维上添加一个1，输入就会变成[1, *, *, *]</p>
 
                 
             </div>
@@ -530,7 +531,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://FanDady.github.io/2021/05/01/shen-du-xue-xi-gpu-yun-fu-wu-qi-de-zu-yong/">http://FanDady.github.io/2021/05/01/shen-du-xue-xi-gpu-yun-fu-wu-qi-de-zu-yong/</a>
+                    <a href="http://FanDady.github.io/2021/05/01/shen-du-xue-xi-pytorch-xun-lian-shu-ju-shi-wen-ti-zong-jie/">http://FanDady.github.io/2021/05/01/shen-du-xue-xi-pytorch-xun-lian-shu-ju-shi-wen-ti-zong-jie/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -572,12 +573,8 @@
                                     <span class="chip bg-color">深度学习</span>
                                 </a>
                             
-                                <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-                                    <span class="chip bg-color">云服务器</span>
-                                </a>
-                            
-                                <a href="/tags/GPU/">
-                                    <span class="chip bg-color">GPU</span>
+                                <a href="/tags/Pytorch/">
+                                    <span class="chip bg-color">Pytorch</span>
                                 </a>
                             
                         </div>
@@ -749,9 +746,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/05/01/shen-du-xue-xi-pytorch-xun-lian-shu-ju-shi-wen-ti-zong-jie/">
                     <div class="card-image">
@@ -768,9 +766,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-01
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-01
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -783,6 +781,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -802,7 +801,7 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
                 <a href="/2021/05/01/shen-du-xue-xi-gpu-yun-fu-wu-qi-de-zu-yong/">
@@ -835,7 +834,6 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
