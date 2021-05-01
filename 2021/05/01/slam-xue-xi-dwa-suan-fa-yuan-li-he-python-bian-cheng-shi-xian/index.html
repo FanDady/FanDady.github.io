@@ -1,0 +1,1280 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="SLAM学习：DWA算法原理和Python编程实现, Yuri">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>SLAM学习：DWA算法原理和Python编程实现 | Yuri</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Yuri</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Yuri</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/FanDady/FanDady.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/FanDady/FanDady.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/11.JPG')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">SLAM学习：DWA算法原理和Python编程实现</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95/">
+                                <span class="chip bg-color">路径规划算法</span>
+                            </a>
+                        
+                            <a href="/tags/SLAM/">
+                                <span class="chip bg-color">SLAM</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/" class="post-category">
+                                路径规划
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-01
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2021-05-01
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.1k
+                </div>
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此部分内容是ROS中Move_Base功能包用到的DWA路径规划算法的介绍和实现，下面我将以自己所理解的DWA算法原理内容展示出来，我看过网上和书籍很多资料，它们的描述基本大同小异，对于想要清楚了解或刚接触DWA算法的人来讲真的比较难理解可能要多看那么四五遍或五六遍才能真正理解这也是比较耗费时间的，所以本文在我理解的基础上写的，本文内容如果有不当之处还请谅解，如果有错误之处也请指出，毕竟本文是以我自己所理解的方式去完成的。</p>
+<p><strong>一、DWA算法原理</strong><br>首先先给出DWA算法的原理流程图</p>
+<p><img src="https://img-blog.csdnimg.cn/20200621101602368.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"></p>
+<p><strong>首先</strong>我将先讲一讲评价函数的计算，评价函数其实是比较简单的。<br>1、距离目标点评价函数：距离目标点评价函数这里采用的就是很普遍也很普通的欧式距离算法，但具体是哪两个点的距离呢，目标点是人为一开始给定的，我们已经有了，另一个点就是一个速度的模拟轨迹的最后一个位置，可能看到这里还会比较模糊什么是模拟轨迹的最后一个位置，没关系，这里先说一下评价函数要求对评价函数怎么算心中有个概念即可。<br>2、速度评价函数：速度评价函数也比较简单，就是计算刚开始人为设定的机器最大线速度值和模拟轨迹的最后一个位置的线速度的差值，总而言之就是两个速度差值就是，这里也是一样先有个概念。<br>3、轨迹距离障碍物的评价函数：轨迹距离障碍物也比较简单，就是对一条轨迹上每个采样的位置进行循环，再对每个障碍物进行循环，也就是一条模拟轨迹路线上每个位置和每个障碍物之间的欧氏距离如何，然后比较得出一个距离最小的值，当然在循环的过程中要不断判断每个距离是不是小于机器人自身半径，因为如果小于自身半径我们判定机器人已经撞上去了这时候就直接返回。</p>
+<p><strong>其次</strong>，我们要开始讲一下速度采样的问题了，这里我要偷一张图来帮助理解了。<br><img src="https://img-blog.csdnimg.cn/20200621103159659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>蓝色圆圈代表机器人，比如现在机器人正处于如上位置，速度采样是什么意思呢，就是在一个动态范围内选取速度，如上是不是有很多发散出来的线，那就是选取到的速度，这里速度其实就是线速度和角速度组合，那这个速度是要怎么选取呢，其实很简单，那就是规定线速度范围和角速度的范围，然后循环使得线速度和角速度互相匹配组成一个速度。而线速度一开始会设定Vmin——Vmax，然后在实际情况中会有Vc-va<em>dt——Vc+va</em>dt（其中Vc是当前线速度，比如刚开始线速度是0后面会随着速度取样慢慢改变，可能这里讲的有些不明白但是看了代码就一定会懂，va是设定的线速度加速度，dt是间隔时间，也就是一条轨迹上隔多久算一次位置等信息直到模拟轨迹时间）；同理角速度也是如此，经过上述后我们得到两个范围Vmin——Vmax和Vc-va·dt——Vc+va·dt这里我们就要取两个范围的交集了，那肯定是两个范围的最小值的取最大，两个范围的最大值取最小，从而形成一个新的范围，不知道这里我有没有讲清楚。</p>
+<p><strong>之后</strong>速度采样完后我们就可以开始计算模拟轨迹上各个点的位置等相关信息了。<br>位置的计算其实很简单就是如下图计算公式：<br><img src="https://img-blog.csdnimg.cn/2020062110452552.png"><br>这里的v就是线速度，w就是角速度，这里可能很多人会好奇为什么这里计算位置使用直线方式计算，这是因为我们一条模拟轨迹上所设定的时间间隔很小所以可以近似把它看作直线来计算，同时这也使得代码计算更为方便快捷，那这里我再偷一张图。<br><img src="https://img-blog.csdnimg.cn/20200621105935889.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>这里可能大家会看到机器人还有个Yrobot方向速度，大家其实可以不用管，因为一般正常的轮子都是只能实现前后方向的位置改变，但是可能有些人会接触到麦克纳姆轮也就是全向移动轮，它可以做到前后左右位置改变，所以其实这里我们大可不必考虑Y方向速度，如果你真想知道你就在百度上随便搜一篇DWA算法你就会在里面找到相关计算方法，但是这里我并不想阐述计算方法。</p>
+<p><strong>最后</strong>，讲到这里DWA算法基本的东西其实已经全部讲完了，其实这个算法并不会太难，如果看不懂就多读几遍，最后的步骤就是不断地循环循环找最优轨迹并沿着最优轨迹走然后再速度采样再模拟轨迹再选择最优轨迹走，直到到达某个位置和目标点的距离不超过自己设定的范围为止。对了，刚刚上面只讲了评价函数但是我给忘了讲评价分的计算，其实也很简单，最简单的方法就是把三个评价函数计算出来的结果全部相加起来当然这是最简单的计算方法，实际上我们不能这样，因为每个参量有大有小，可能因为某个评价函数的结果过大直接覆盖了其他两个，所以我们还是要进行平滑处理的操作，这里我要再去偷个公式图。<br><img src="https://img-blog.csdnimg.cn/20200621105953621.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>这个图里面的head就是距离目标点距离的评价值，dist就是距离障碍物的，velocity就是速度，其实总而言之就是归一化呗，没什么特别深奥的东西，最后的评价分计算公式就是把这归一化后的三个值相加起来，当然可以相应的在每个评价值前面乘上权重系数，也就是偏重于哪个评价值，最后计算公式就是<br><img src="https://img-blog.csdnimg.cn/20200621110256507.png"></p>
+<p><strong>二、DWA算法Python实现代码</strong><br>首先说明一下这个代码我是参考给出的标准的DWA算法实现，但是我是在自己完全理解后自己看着DWA公式来写出算法，代码的每一步基本都有注释。<br>这份代码里面可能大家看到，我没有用权重系数和归一化，这是因为我是在坐标轴上一个小区域直接模拟，所以计算量都不是很大，所以我就没有用到，在真正以后实际情况里，还是要按照公式来做</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">from math import *</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line"></span><br><span class="line">#参数设置</span><br><span class="line">V_Min &#x3D; -0.5            #最小速度</span><br><span class="line">V_Max &#x3D; 3.0             #最大速度</span><br><span class="line">W_Min &#x3D; -50*pi&#x2F;180.0    #最小角速度</span><br><span class="line">W_Max &#x3D; 50*pi&#x2F;180.0     #最大角速度</span><br><span class="line">Va &#x3D; 0.5                #加速度</span><br><span class="line">Wa &#x3D; 30.0*pi&#x2F;180.0      #角加速度</span><br><span class="line">Vreso &#x3D; 0.01            #速度分辨率</span><br><span class="line">Wreso &#x3D; 0.1*pi&#x2F;180.0    #角速度分辨率</span><br><span class="line">radius &#x3D; 1              #机器人模型半径</span><br><span class="line">Dt &#x3D; 0.1                #时间间隔</span><br><span class="line">Predict_Time &#x3D; 4.0      #模拟轨迹的持续时间</span><br><span class="line">alpha &#x3D; 1.0             #距离目标点的评价函数的权重系数</span><br><span class="line">Belta &#x3D; 1.0             #速度评价函数的权重系数</span><br><span class="line">Gamma &#x3D; 1.0             #距离障碍物距离的评价函数的权重系数</span><br><span class="line"></span><br><span class="line">#障碍物</span><br><span class="line">Obstacle&#x3D;np.array([[0,10],[2,10],[4,10],[6,10],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[10,7],[10,9],[10,11],[10,13]])</span><br><span class="line">#Obstacle &#x3D; np.array([[0, 2]])</span><br><span class="line"></span><br><span class="line">#距离目标点的评价函数</span><br><span class="line">def Goal_Cost(Goal,Pos):</span><br><span class="line">    return sqrt((Pos[-1,0]-Goal[0])**2+(Pos[-1,1]-Goal[1])**2)</span><br><span class="line"></span><br><span class="line">#速度评价函数</span><br><span class="line">def Velocity_Cost(Pos):</span><br><span class="line">    return V_Max-Pos[-1,3]</span><br><span class="line"></span><br><span class="line">#距离障碍物距离的评价函数</span><br><span class="line">def Obstacle_Cost(Pos,Obstacle):</span><br><span class="line">    MinDistance &#x3D; float(&#39;Inf&#39;)          #初始化时候机器人周围无障碍物所以最小距离设为无穷</span><br><span class="line">    for i in range(len(Pos)):           #对每一个位置点循环</span><br><span class="line">        for j in range(len(Obstacle)):  #对每一个障碍物循环</span><br><span class="line">            Current_Distance &#x3D; sqrt((Pos[i,0]-Obstacle[j,0])**2+(Pos[i,1]-Obstacle[j,1])**2)  #求出每个点和每个障碍物距离</span><br><span class="line">            if Current_Distance &lt; radius:            #如果小于机器人自身的半径那肯定撞到障碍物了返回的评价值自然为无穷</span><br><span class="line">                return float(&#39;Inf&#39;)</span><br><span class="line">            if Current_Distance &lt; MinDistance:</span><br><span class="line">                MinDistance&#x3D;Current_Distance         #得到点和障碍物距离的最小</span><br><span class="line"></span><br><span class="line">    return 1&#x2F;MinDistance</span><br><span class="line"></span><br><span class="line">#速度采用</span><br><span class="line">def V_Range(X):</span><br><span class="line">    Vmin_Actual &#x3D; X[3]-Va*Dt          #实际在dt时间间隔内的最小速度</span><br><span class="line">    Vmax_actual &#x3D; X[3]+Va*Dt          #实际载dt时间间隔内的最大速度</span><br><span class="line">    Wmin_Actual &#x3D; X[4]-Wa*Dt          #实际在dt时间间隔内的最小角速度</span><br><span class="line">    Wmax_Actual &#x3D; X[4]+Wa*Dt          #实际在dt时间间隔内的最大角速度</span><br><span class="line">    VW &#x3D; [max(V_Min,Vmin_Actual),min(V_Max,Vmax_actual),max(W_Min,Wmin_Actual),min(W_Max,Wmax_Actual)]  #因为前面本身定义了机器人最小最大速度所以这里取交集</span><br><span class="line">    return VW</span><br><span class="line"></span><br><span class="line">#一条模拟轨迹路线中的位置，速度计算</span><br><span class="line">def Motion(X,u,dt):</span><br><span class="line">    X[0]+&#x3D;u[0]*dt*cos(X[2])           #x方向上位置</span><br><span class="line">    X[1]+&#x3D;u[0]*dt*sin(X[2])           #y方向上位置</span><br><span class="line">    X[2]+&#x3D;u[1]*dt                     #角度变换</span><br><span class="line">    X[3]&#x3D;u[0]                         #速度</span><br><span class="line">    X[4]&#x3D;u[1]                         #角速度</span><br><span class="line">    return X</span><br><span class="line"></span><br><span class="line">#一条模拟轨迹的完整计算</span><br><span class="line">def Calculate_Traj(X,u):</span><br><span class="line">    Traj&#x3D;np.array(X)</span><br><span class="line">    Xnew&#x3D;np.array(X)</span><br><span class="line">    time&#x3D;0</span><br><span class="line">    while time &lt;&#x3D;Predict_Time:        #一条模拟轨迹时间</span><br><span class="line">        Xnew&#x3D;Motion(Xnew,u,Dt)</span><br><span class="line">        Traj&#x3D;np.vstack((Traj,Xnew))   #一条完整模拟轨迹中所有信息集合成一个矩阵</span><br><span class="line">        time&#x3D;time+Dt</span><br><span class="line">    return Traj</span><br><span class="line"></span><br><span class="line">#DWA核心计算</span><br><span class="line">def dwa_Core(X,u,goal,obstacles):</span><br><span class="line">    vw&#x3D;V_Range(X)</span><br><span class="line">    best_traj&#x3D;np.array(X)</span><br><span class="line">    min_score&#x3D;10000.0                 #随便设置一下初始的最小评价分数</span><br><span class="line">    for v in np.arange(vw[0], vw[1], Vreso):         #对每一个线速度循环</span><br><span class="line">        for w in np.arange(vw[2], vw[3], Wreso):     #对每一个角速度循环</span><br><span class="line">            traj&#x3D;Calculate_Traj(X,[v,w])</span><br><span class="line">            goal_score&#x3D;Goal_Cost(goal,traj)</span><br><span class="line">            vel_score&#x3D;Velocity_Cost(traj)</span><br><span class="line">            obs_score&#x3D;Obstacle_Cost(traj,Obstacle)</span><br><span class="line">            score&#x3D;goal_score+vel_score+obs_score</span><br><span class="line">            if min_score&gt;&#x3D;score:                    #得出最优评分和轨迹</span><br><span class="line">                min_score&#x3D;score</span><br><span class="line">                u&#x3D;np.array([v,w])</span><br><span class="line">                best_traj&#x3D;traj</span><br><span class="line"></span><br><span class="line">    return u,best_traj</span><br><span class="line"></span><br><span class="line">x&#x3D;np.array([2,2,45*pi&#x2F;180,0,0])                          #设定初始位置，角速度，线速度</span><br><span class="line">u&#x3D;np.array([0,0])                                        #设定初始速度</span><br><span class="line">goal&#x3D;np.array([8,8])                                     #设定目标位置</span><br><span class="line">global_tarj&#x3D;np.array(x)</span><br><span class="line">for i in range(1000):                                     #循环1000次，这里可以直接改成while的直到循环到目标位置</span><br><span class="line">    u,current&#x3D;dwa_Core(x,u,goal,Obstacle)</span><br><span class="line">    x&#x3D;Motion(x,u,Dt)</span><br><span class="line">    global_tarj&#x3D;np.vstack((global_tarj,x))                 #存储最优轨迹为一个矩阵形式每一行存放每一条最有轨迹的信息</span><br><span class="line">    if sqrt((x[0]-goal[0])**2+(x[1]-goal[1])**2)&lt;&#x3D;radius:  #判断是否到达目标点</span><br><span class="line">        print(&#39;Arrived&#39;)</span><br><span class="line">        break</span><br><span class="line"></span><br><span class="line">plt.plot(global_tarj[:,0],global_tarj[:,1],&#39;*r&#39;,Obstacle[0:3,0],Obstacle[0:3,1],&#39;-g&#39;,Obstacle[4:9,0],Obstacle[4:9,1],&#39;-g&#39;,Obstacle[10:13,0],Obstacle[10:13,1],&#39;-g&#39;)  #画出最优轨迹的路线</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>效果展示<br><img src="https://img-blog.csdnimg.cn/20200621195652606.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br><strong>三、结语和总结</strong><br>其实看不懂的东西只要多看几遍多耐心的琢磨就肯定会明白其中的道理，多看几遍真的没有错。只要自己不要自暴自弃就好，以前老师总说不懂的知识多看几遍，我一直不放在心上，长大后才发现老师说的真的是对的，很多事情也是如此，多看多做几遍，简单的事情重复做，重复的事情坚持做！</p>
+<p><strong>四、参考文献</strong><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011600592/article/details/54613717">https://blog.csdn.net/u011600592/article/details/54613717</a><br><a target="_blank" rel="noopener" href="https://scm_mos.gitlab.io/motion-planner/dwa-local-planner/">https://scm_mos.gitlab.io/motion-planner/dwa-local-planner/</a></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Yuri</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://FanDady.github.io/2021/05/01/slam-xue-xi-dwa-suan-fa-yuan-li-he-python-bian-cheng-shi-xian/">http://FanDady.github.io/2021/05/01/slam-xue-xi-dwa-suan-fa-yuan-li-he-python-bian-cheng-shi-xian/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Yuri</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95/">
+                                    <span class="chip bg-color">路径规划算法</span>
+                                </a>
+                            
+                                <a href="/tags/SLAM/">
+                                    <span class="chip bg-color">SLAM</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/01/slam-xue-xi-gmapping-jian-tu-xia-di-tu-bian-xing-geng-xin-su-du-man-wen-ti/">
+                    <div class="card-image">
+                        
+                        <img src="/images/13.JPG" class="responsive-img" alt="SLAM学习：Gmapping建图下地图变形更新速度慢问题">
+                        
+                        <span class="card-title">SLAM学习：Gmapping建图下地图变形更新速度慢问题</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            在ROS上仿真实现Gmapping建图算法时遇到激光雷达扫描建图成像慢的问题
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-01
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%BB%BA%E5%9B%BE%E7%AE%97%E6%B3%95/" class="post-category">
+                                    建图算法
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/SLAM/">
+                        <span class="chip bg-color">SLAM</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%BB%BA%E5%9B%BE%E7%AE%97%E6%B3%95/">
+                        <span class="chip bg-color">建图算法</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/01/slam-xue-xi-ji-lu-pei-zhi-she-xiang-tou-shi-hou-chu-xian-de-yi-xie-xiao-wen-ti/">
+                    <div class="card-image">
+                        
+                        <img src="/images/9.JPG" class="responsive-img" alt="SLAM学习：记录配置摄像头时候出现的一些小问题">
+                        
+                        <span class="card-title">SLAM学习：记录配置摄像头时候出现的一些小问题</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            记录在给ROS小车仿真上安装测试摄像头时遇到的问题
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-01
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/SLAM/" class="post-category">
+                                    SLAM
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/SLAM/">
+                        <span class="chip bg-color">SLAM</span>
+                    </a>
+                    
+                    <a href="/tags/ROS/">
+                        <span class="chip bg-color">ROS</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">范智炜</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">24k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/FanDady" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:zhwe.fan@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+<a href="https://blog.csdn.net/qq_43711697" class="tooltipped" target="_blank" data-tooltip="访问我的CSDN" data-position="top" data-delay="50">
+    <i class="fas fa-blog"></i>
+</a>
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1140021702" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1140021702" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+    <a href="https://www.zhihu.com/people/fan-zhi-wei-68" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: https://www.zhihu.com/people/fan-zhi-wei-68" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+    <script type="text/javascript" color="0,0,255"
+        pointColor="0,0,255" opacity='0.7'
+        zIndex="-1" count="99"
+        src="/libs/background/canvas-nest.js"></script>
+    
+
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
