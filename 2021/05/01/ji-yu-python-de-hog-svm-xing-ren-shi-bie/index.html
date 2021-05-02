@@ -506,6 +506,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
         <!-- 代码块折行 -->
@@ -531,7 +534,94 @@
 <p>以上就是SVM的简介如果需要更详细的叙述可以查看书籍或网上资料有很多关于SVM的细节上的推导。</p>
 <p><strong>三、基于Python的HOG+SVM行人检测</strong><br>HOG+SVM的基本步骤其实都大同小异这里我整理了下自己的。<br>1.提取获得正样本和负样本数据当然还有测试集数据，正样本就是行人的图像标签为+1而负样本就是非行人的图像标签为-1。<br>2.开始获得正样本和负样本的HOG数据并且保存在数组里面，还要再设一个标签数组用来存放正负样本的标签值<br>3.svm对象的训练，并且保存下训练后的数据文件<br>4.加载测试对象，载入数据文件，计算HOG，用svm判断。</p>
 <p>下面上代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">def get_svm_detector(svm):</span><br><span class="line">    sv &#x3D; svm.getSupportVectors()    #SVM支持向量</span><br><span class="line">    rho, _, _ &#x3D; svm.getDecisionFunction(0)#SVM的决策函数</span><br><span class="line">    sv &#x3D; np.transpose(sv)</span><br><span class="line">    return np.append(sv, [[-rho]], 0)  #得到支持向量和决策函数系数的一个数组</span><br><span class="line">#SVM的分类平面计算</span><br><span class="line"></span><br><span class="line">PosNum&#x3D;3548</span><br><span class="line">NegNum&#x3D;10000</span><br><span class="line">winSize&#x3D;(64,128)</span><br><span class="line">blockSize&#x3D;(16,16)</span><br><span class="line">blockStride&#x3D;(8,8)</span><br><span class="line">cellSize&#x3D;(8,8)</span><br><span class="line">nBin&#x3D;9</span><br><span class="line">#初始的值设定</span><br><span class="line"></span><br><span class="line">hog&#x3D;cv2.HOGDescriptor(winSize,blockSize,blockStride,cellSize,nBin)</span><br><span class="line">#HOG对象的创建初始化</span><br><span class="line"></span><br><span class="line">svm&#x3D;cv2.ml.SVM_create()</span><br><span class="line">#SVM对象的创建</span><br><span class="line"></span><br><span class="line">featureNum &#x3D; int(((128 - 16) &#x2F; 8 + 1) * ((64 - 16) &#x2F; 8 + 1) * 4 * 9)</span><br><span class="line">#计算HOG的维度总数即特征数</span><br><span class="line"></span><br><span class="line">featureArray &#x3D; np.zeros(((PosNum + NegNum), featureNum), np.float32)</span><br><span class="line">labelArray &#x3D; np.zeros(((PosNum + NegNum), 1), np.int32)</span><br><span class="line">#构建两个数组分别是放特征的和放标签的</span><br><span class="line"></span><br><span class="line">for i in range(0,PosNum):</span><br><span class="line">    n&#x3D;str(i+1)</span><br><span class="line">    fileName&#x3D;&quot;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;DATA&#x2F;&#x2F;pos&#x2F;&#x2F;person&quot;+n.zfill(6)+&quot;.jpg&quot;</span><br><span class="line">    img&#x3D;cv2.imread(fileName)</span><br><span class="line">    hist&#x3D;hog.compute(img,(8,8))</span><br><span class="line">    for j in range(0,featureNum):</span><br><span class="line">        featureArray[i,j]&#x3D;hist[j]</span><br><span class="line">    labelArray[i,0]&#x3D;1</span><br><span class="line">#正样本的HOG特征的计算并存进featureArray数组中</span><br><span class="line"></span><br><span class="line">for i in range(0,NegNum):</span><br><span class="line">    n&#x3D;str(i+1)</span><br><span class="line">    filename&#x3D;&quot;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;DATA&#x2F;&#x2F;neg&#x2F;&#x2F;noperson&quot;+n.zfill(6)+&quot;.jpg&quot;</span><br><span class="line">    img&#x3D;cv2.imread(filename)</span><br><span class="line">    hist&#x3D;hog.compute(img,(8,8))</span><br><span class="line">    for j in range(0,featureNum):</span><br><span class="line">        featureArray[i+PosNum,j]&#x3D;hist[j]</span><br><span class="line">    labelArray[i+PosNum,0]&#x3D;-1</span><br><span class="line">#负样本的HOG特征计算</span><br><span class="line"></span><br><span class="line">#SVM的参数初始化，这里用SVM线性分类器来做速度比较快</span><br><span class="line">svm.setCoef0(0)</span><br><span class="line">svm.setCoef0(0.0)</span><br><span class="line">svm.setDegree(3)</span><br><span class="line">criteria &#x3D; (cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS, 1000, 1e-3)</span><br><span class="line">svm.setTermCriteria(criteria)</span><br><span class="line">svm.setGamma(0)</span><br><span class="line">svm.setNu(0.5)</span><br><span class="line">svm.setP(0.1)</span><br><span class="line">svm.setC(0.01)</span><br><span class="line">svm.setType(cv2.ml.SVM_EPS_SVR)</span><br><span class="line">svm.setKernel(cv2.ml.SVM_LINEAR)</span><br><span class="line">svm.setC(0.01)</span><br><span class="line">#SVM对象参数的设置，核算子的设定等</span><br><span class="line"></span><br><span class="line">svm.train(featureArray, cv2.ml.ROW_SAMPLE, labelArray)</span><br><span class="line">#把计算得到的HOG数据放到SVM对象分类器里面进行训练</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">HOG&#x3D;cv2.HOGDescriptor()</span><br><span class="line">HOG.setSVMDetector(get_svm_detector(svm))</span><br><span class="line">HOG.save(&#39;myHogDector.bin&#39;)</span><br><span class="line">#HOG和SVM结合的一个分类器并且把文件存下来save</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">myHog &#x3D; cv2.HOGDescriptor()</span><br><span class="line">myHog.load(&#39;myHogDector.bin&#39;)</span><br><span class="line">#开始加载上述的那个分类器</span><br><span class="line">imageSrc &#x3D; cv2.imread(&#39;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;2.jpg&#39;)</span><br><span class="line">#输入检测的图像</span><br><span class="line">rects,wei&#x3D;myHog.detectMultiScale(imageSrc,0,(4, 4),(32, 32), 1.05, 2)</span><br><span class="line">for (x, y, w, h) in rects:</span><br><span class="line">    cv2.rectangle(imageSrc, (x, y), (x + w, y + h), (0, 0, 255), 2)</span><br><span class="line">#对检测出来的分类为1的矩形进行遍历框出来</span><br><span class="line">cv2.imshow(&#39;dst&#39;, imageSrc)</span><br><span class="line">cv2.waitKey(0)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">import cv2
+import numpy as np
+
+def get_svm_detector(svm):
+    sv &#x3D; svm.getSupportVectors()    #SVM支持向量
+    rho, _, _ &#x3D; svm.getDecisionFunction(0)#SVM的决策函数
+    sv &#x3D; np.transpose(sv)
+    return np.append(sv, [[-rho]], 0)  #得到支持向量和决策函数系数的一个数组
+#SVM的分类平面计算
+
+PosNum&#x3D;3548
+NegNum&#x3D;10000
+winSize&#x3D;(64,128)
+blockSize&#x3D;(16,16)
+blockStride&#x3D;(8,8)
+cellSize&#x3D;(8,8)
+nBin&#x3D;9
+#初始的值设定
+
+hog&#x3D;cv2.HOGDescriptor(winSize,blockSize,blockStride,cellSize,nBin)
+#HOG对象的创建初始化
+
+svm&#x3D;cv2.ml.SVM_create()
+#SVM对象的创建
+
+featureNum &#x3D; int(((128 - 16) &#x2F; 8 + 1) * ((64 - 16) &#x2F; 8 + 1) * 4 * 9)
+#计算HOG的维度总数即特征数
+
+featureArray &#x3D; np.zeros(((PosNum + NegNum), featureNum), np.float32)
+labelArray &#x3D; np.zeros(((PosNum + NegNum), 1), np.int32)
+#构建两个数组分别是放特征的和放标签的
+
+for i in range(0,PosNum):
+    n&#x3D;str(i+1)
+    fileName&#x3D;&quot;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;DATA&#x2F;&#x2F;pos&#x2F;&#x2F;person&quot;+n.zfill(6)+&quot;.jpg&quot;
+    img&#x3D;cv2.imread(fileName)
+    hist&#x3D;hog.compute(img,(8,8))
+    for j in range(0,featureNum):
+        featureArray[i,j]&#x3D;hist[j]
+    labelArray[i,0]&#x3D;1
+#正样本的HOG特征的计算并存进featureArray数组中
+
+for i in range(0,NegNum):
+    n&#x3D;str(i+1)
+    filename&#x3D;&quot;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;DATA&#x2F;&#x2F;neg&#x2F;&#x2F;noperson&quot;+n.zfill(6)+&quot;.jpg&quot;
+    img&#x3D;cv2.imread(filename)
+    hist&#x3D;hog.compute(img,(8,8))
+    for j in range(0,featureNum):
+        featureArray[i+PosNum,j]&#x3D;hist[j]
+    labelArray[i+PosNum,0]&#x3D;-1
+#负样本的HOG特征计算
+
+#SVM的参数初始化，这里用SVM线性分类器来做速度比较快
+svm.setCoef0(0)
+svm.setCoef0(0.0)
+svm.setDegree(3)
+criteria &#x3D; (cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS, 1000, 1e-3)
+svm.setTermCriteria(criteria)
+svm.setGamma(0)
+svm.setNu(0.5)
+svm.setP(0.1)
+svm.setC(0.01)
+svm.setType(cv2.ml.SVM_EPS_SVR)
+svm.setKernel(cv2.ml.SVM_LINEAR)
+svm.setC(0.01)
+#SVM对象参数的设置，核算子的设定等
+
+svm.train(featureArray, cv2.ml.ROW_SAMPLE, labelArray)
+#把计算得到的HOG数据放到SVM对象分类器里面进行训练
+
+
+HOG&#x3D;cv2.HOGDescriptor()
+HOG.setSVMDetector(get_svm_detector(svm))
+HOG.save(&#39;myHogDector.bin&#39;)
+#HOG和SVM结合的一个分类器并且把文件存下来save
+
+
+myHog &#x3D; cv2.HOGDescriptor()
+myHog.load(&#39;myHogDector.bin&#39;)
+#开始加载上述的那个分类器
+imageSrc &#x3D; cv2.imread(&#39;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;2.jpg&#39;)
+#输入检测的图像
+rects,wei&#x3D;myHog.detectMultiScale(imageSrc,0,(4, 4),(32, 32), 1.05, 2)
+for (x, y, w, h) in rects:
+    cv2.rectangle(imageSrc, (x, y), (x + w, y + h), (0, 0, 255), 2)
+#对检测出来的分类为1的矩形进行遍历框出来
+cv2.imshow(&#39;dst&#39;, imageSrc)
+cv2.waitKey(0)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>下面是效果图分别是非行人图像和行人图像，对于非行人图是不会有矩形框出的，而对于行人图像将会有矩形框出行人大致轮廓。<br><img src="https://img-blog.csdnimg.cn/20200204133811249.png"><br><img src="https://img-blog.csdnimg.cn/20200204133830880.png"><br><strong>四、结语与总结</strong><br>这一份代码只是比较草稿比较简单的一份，只是写明了HOG+SVM来用于检测的一个基本的步骤，其实还是有错误率存在这是由于两个原因，一个是可能自身的样本还不够大，第二个是这份是比较简单和草稿的代码里面的SVM训练只有一次，其实按道理应该要对负样本进行一次训练然后抽出那些分类错的记录下来纠正一下，但这些还没写好，这里可能代码效果还不是很好，请谅解。<br>可能本文写的不是那么好还是请各位谅解，本人只是想记录一下学习的基本过程步骤，本文如有雷同敬请谅解，毕竟自己也是看了很多的文章和书籍然后脑海里综合了很多。</p>
 
                 

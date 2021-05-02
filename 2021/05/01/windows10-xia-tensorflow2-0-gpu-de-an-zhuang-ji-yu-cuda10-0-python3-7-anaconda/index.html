@@ -489,7 +489,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    985
+                    990
                 </div>
                 
 
@@ -506,6 +506,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
         <!-- 代码块折行 -->
@@ -521,16 +524,35 @@
 <p>二、安装CUDA10.0.CUDA10.0就在官网上下载即可<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-10.0-download-archive?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exelocal">CUDA官网</a>如下图选择<br><img src="https://img-blog.csdnimg.cn/20200206225023985.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>下载完成后就会慢慢的出现一个安装CUDA的程序如下图，点击自定义安装(高级)<br><img src="https://img-blog.csdnimg.cn/20200206225250251.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>本人电脑已有VS2017故不再装与VS有关的配置<br>接下来就是安装了，就选择默认路径了不要再去改到其他地方，我看网上说改到其他路径可能会出现问题，当然我没有去试过。<br><img src="https://img-blog.csdnimg.cn/20200206225656147.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>然后CUDA10.0就安装完毕了，然后可能你会看到网上还有什么配置环境变量什么的其实最后人家软件都帮你自动配置好了根本就不用在自己配置了</p>
 <p>三、CUDNN的安装。CUDNN同样也是去官网上去下载然后需要保存到CUDA当时的安装路径下。先给出下载地址<a target="_blank" rel="noopener" href="https://developer.nvidia.com/rdp/cudnn-archive">CUDNN下载地址</a>这里要选择对应CUDA10.0版本的cudnn。下载好之后呢你要把这个zip文件解压到这里<br><img src="https://img-blog.csdnimg.cn/2020020623024432.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>这里的cudnn文件夹是提前自己创建的，然后解压到这里面来。这个CUDA路径就是当时安装CUDA的时候我说的默认路径，如果你选的是默认路径跟着我走就是对的。接下来呢就是需要把解压后的文件夹里的三个小文件复制到CUDA里面。<br><img src="https://img-blog.csdnimg.cn/20200206230527420.png"><br>这是官网的教程说明，应该很显而易懂。（解压后的文件夹名字就是cuda）<br>这里附上官网安装cudnn教程<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html#install-windows">cudnn官方教程</a><br>到这里TF2.0的铺垫安装基本完成了接下来就是TF2.0的安装</p>
 <p>四、Tensorflow2.0-GPU的安装<br>这里我们用国内清华源下载比较快，如果不用的话可能会超级无敌慢</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install tensorflow-gpu&#x3D;&#x3D;2.0.0 -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">pip install tensorflow-gpu&#x3D;&#x3D;2.0.0 -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>接下来就是测试我们的Tensorflow2.0了<br>打开Pycharm（或者是Jupyter Notebook）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf	</span><br><span class="line">version &#x3D; tf.__version__	</span><br><span class="line">gpu_ok &#x3D; tf.test.is_gpu_available()	</span><br><span class="line">print(&quot;tf version:&quot;,version,&quot;\nuse GPU&quot;,gpu_ok)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">import tensorflow as tf	
+version &#x3D; tf.__version__	
+gpu_ok &#x3D; tf.test.is_gpu_available()	
+print(&quot;tf version:&quot;,version,&quot;\nuse GPU&quot;,gpu_ok)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>输出</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tf version: 2.0.0	</span><br><span class="line">use GPU True</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">tf version: 2.0.0	
+use GPU True<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>当然这里如何判断是否代码真的在GPU上面跑，执行以下代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow.compat.v1 as tf</span><br><span class="line"></span><br><span class="line">tf.disable_v2_behavior()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a &#x3D; tf.constant([1.2,2.3,3.6], shape&#x3D;[3],name&#x3D;&#39;a&#39;)</span><br><span class="line">b &#x3D; tf.constant([1.2,2.3,3.6], shape&#x3D;[3],name&#x3D;&#39;b&#39;)</span><br><span class="line"></span><br><span class="line">c &#x3D; a+b</span><br><span class="line">session &#x3D; tf.Session(config&#x3D;tf.ConfigProto(log_device_placement&#x3D;True))</span><br><span class="line">print(session.run(c))</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">import tensorflow.compat.v1 as tf
+
+tf.disable_v2_behavior()
+
+
+a &#x3D; tf.constant([1.2,2.3,3.6], shape&#x3D;[3],name&#x3D;&#39;a&#39;)
+b &#x3D; tf.constant([1.2,2.3,3.6], shape&#x3D;[3],name&#x3D;&#39;b&#39;)
+
+c &#x3D; a+b
+session &#x3D; tf.Session(config&#x3D;tf.ConfigProto(log_device_placement&#x3D;True))
+print(session.run(c))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>输出这样就是GPU</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Device mapping:</span><br><span class="line">&#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;gpu:0 -&gt; device: 0, name: Quadro M5000, pci bus id: 0000:01:00.0</span><br><span class="line">add: (Add): &#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;gpu:0</span><br><span class="line">b: (Const): &#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;gpu:0</span><br><span class="line">a: (Const): &#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;gpu:0</span><br><span class="line">[2.4 4.6 7.2]</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">Device mapping:
+&#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;gpu:0 -&gt; device: 0, name: Quadro M5000, pci bus id: 0000:01:00.0
+add: (Add): &#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;gpu:0
+b: (Const): &#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;gpu:0
+a: (Const): &#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;gpu:0
+[2.4 4.6 7.2]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>可能会刷到说用import tensrflow as tf 然后tf.Session（）做测试，但是会报错说没有modelSession那是因为TF到2.0后的一小改动它的Session在tf.compat.v1里面了。</p>
 

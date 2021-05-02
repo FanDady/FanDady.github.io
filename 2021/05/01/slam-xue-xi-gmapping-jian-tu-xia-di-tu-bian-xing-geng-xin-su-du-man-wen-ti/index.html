@@ -489,7 +489,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    814
+                    813
                 </div>
                 
 
@@ -506,6 +506,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
         <!-- 代码块折行 -->
@@ -517,7 +520,44 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p><strong>一、问题描述</strong><br>首先，我在用Gmapping建图的时候发现扫描出来的地图更新速度很慢然后还有就是地图的完整性不高容易变形扭曲，我们在一般在路径规划前需要用适当的建图算法把地图创建出来然后保存方可进行全局路径规划，但是如果地图创建出来扭曲完整性不高那么在后面的路径规划中也更谈不上规划，问题如下图所示<br><img src="https://img-blog.csdnimg.cn/20200521141320563.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br><strong>二、问题解决</strong><br>其实主要是修改Gmapping的配置文件，因为官方的配置文件不可以直接用一定要视具体情况而作出修改<br>在gmapping.launch文件中修改</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;launch&gt;</span><br><span class="line">    &lt;arg name&#x3D;&quot;scan_topic&quot; default&#x3D;&quot;scan&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;node pkg&#x3D;&quot;gmapping&quot; type&#x3D;&quot;slam_gmapping&quot; name&#x3D;&quot;slam_gmapping&quot; output&#x3D;&quot;screen&quot; clear_params&#x3D;&quot;true&quot;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;odom_frame&quot; value&#x3D;&quot;odom&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;map_update_interval&quot; value&#x3D;&quot;0.1&quot;&#x2F;&gt;   &lt;!--雷达更新速度--&gt;</span><br><span class="line">        &lt;!-- Set maxUrange &lt; actual maximum range of the Laser --&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;maxRange&quot; value&#x3D;&quot;12.0&quot;&#x2F;&gt;     </span><br><span class="line">        &lt;param name&#x3D;&quot;maxUrange&quot; value&#x3D;&quot;10.0&quot;&#x2F;&gt;         &lt;!--雷达扫描最大距离--&gt;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;sigma&quot; value&#x3D;&quot;0.05&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;kernelSize&quot; value&#x3D;&quot;1&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;lstep&quot; value&#x3D;&quot;0.05&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;astep&quot; value&#x3D;&quot;0.05&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;iterations&quot; value&#x3D;&quot;5&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;lsigma&quot; value&#x3D;&quot;0.075&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;ogain&quot; value&#x3D;&quot;3.0&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;lskip&quot; value&#x3D;&quot;0&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;srr&quot; value&#x3D;&quot;0.01&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;srt&quot; value&#x3D;&quot;0.02&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;str&quot; value&#x3D;&quot;0.01&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;stt&quot; value&#x3D;&quot;0.02&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;linearUpdate&quot; value&#x3D;&quot;0.05&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;angularUpdate&quot; value&#x3D;&quot;0.436&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;temporalUpdate&quot; value&#x3D;&quot;-1.0&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;resampleThreshold&quot; value&#x3D;&quot;0.5&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;particles&quot; value&#x3D;&quot;80&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;xmin&quot; value&#x3D;&quot;-1.0&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;ymin&quot; value&#x3D;&quot;-1.0&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;xmax&quot; value&#x3D;&quot;1.0&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;ymax&quot; value&#x3D;&quot;1.0&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;delta&quot; value&#x3D;&quot;0.05&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;llsamplerange&quot; value&#x3D;&quot;0.01&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;llsamplestep&quot; value&#x3D;&quot;0.01&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;lasamplerange&quot; value&#x3D;&quot;0.005&quot;&#x2F;&gt;</span><br><span class="line">        &lt;param name&#x3D;&quot;lasamplestep&quot; value&#x3D;&quot;0.005&quot;&#x2F;&gt;</span><br><span class="line">        &lt;remap from&#x3D;&quot;scan&quot; to&#x3D;&quot;$(arg scan_topic)&quot;&#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;node&gt;</span><br><span class="line">&lt;&#x2F;launch&gt;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&lt;launch&gt;
+    &lt;arg name&#x3D;&quot;scan_topic&quot; default&#x3D;&quot;scan&quot; &#x2F;&gt;
+
+    &lt;node pkg&#x3D;&quot;gmapping&quot; type&#x3D;&quot;slam_gmapping&quot; name&#x3D;&quot;slam_gmapping&quot; output&#x3D;&quot;screen&quot; clear_params&#x3D;&quot;true&quot;&gt;
+        &lt;param name&#x3D;&quot;odom_frame&quot; value&#x3D;&quot;odom&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;map_update_interval&quot; value&#x3D;&quot;0.1&quot;&#x2F;&gt;   &lt;!--雷达更新速度--&gt;
+        &lt;!-- Set maxUrange &lt; actual maximum range of the Laser --&gt;
+        &lt;param name&#x3D;&quot;maxRange&quot; value&#x3D;&quot;12.0&quot;&#x2F;&gt;     
+        &lt;param name&#x3D;&quot;maxUrange&quot; value&#x3D;&quot;10.0&quot;&#x2F;&gt;         &lt;!--雷达扫描最大距离--&gt;&gt;
+        &lt;param name&#x3D;&quot;sigma&quot; value&#x3D;&quot;0.05&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;kernelSize&quot; value&#x3D;&quot;1&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;lstep&quot; value&#x3D;&quot;0.05&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;astep&quot; value&#x3D;&quot;0.05&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;iterations&quot; value&#x3D;&quot;5&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;lsigma&quot; value&#x3D;&quot;0.075&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;ogain&quot; value&#x3D;&quot;3.0&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;lskip&quot; value&#x3D;&quot;0&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;srr&quot; value&#x3D;&quot;0.01&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;srt&quot; value&#x3D;&quot;0.02&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;str&quot; value&#x3D;&quot;0.01&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;stt&quot; value&#x3D;&quot;0.02&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;linearUpdate&quot; value&#x3D;&quot;0.05&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;angularUpdate&quot; value&#x3D;&quot;0.436&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;temporalUpdate&quot; value&#x3D;&quot;-1.0&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;resampleThreshold&quot; value&#x3D;&quot;0.5&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;particles&quot; value&#x3D;&quot;80&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;xmin&quot; value&#x3D;&quot;-1.0&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;ymin&quot; value&#x3D;&quot;-1.0&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;xmax&quot; value&#x3D;&quot;1.0&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;ymax&quot; value&#x3D;&quot;1.0&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;delta&quot; value&#x3D;&quot;0.05&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;llsamplerange&quot; value&#x3D;&quot;0.01&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;llsamplestep&quot; value&#x3D;&quot;0.01&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;lasamplerange&quot; value&#x3D;&quot;0.005&quot;&#x2F;&gt;
+        &lt;param name&#x3D;&quot;lasamplestep&quot; value&#x3D;&quot;0.005&quot;&#x2F;&gt;
+        &lt;remap from&#x3D;&quot;scan&quot; to&#x3D;&quot;$(arg scan_topic)&quot;&#x2F;&gt;
+    &lt;&#x2F;node&gt;
+&lt;&#x2F;launch&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>上面的内容主要是修改那两个注释的地方，最主要的就是更新速度，因为更新速度一提升，建图的完整性也会跟着提高很多，下面是做过修改后的地图<br><img src="https://img-blog.csdnimg.cn/20200521142021140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br><strong>三、总结</strong><br>给出一些参考的文献和文章<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42263553/article/details/100587024">参考文献</a></p>
 
                 

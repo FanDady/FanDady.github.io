@@ -506,6 +506,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
         <!-- 代码块折行 -->
@@ -518,7 +521,8 @@
             <div id="articleContent">
                 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文是关于笔者在为自己建立的模型上添加摄像头以便为了后续的视觉开发做准备，在配置摄像头的时候遇到了一些小问题，这里本文也只是为了记录而已，可能文章略简，请谅解（本文摄像头使用的是Kinect摄像头）</p>
 <p><strong>一、问题一描述</strong><br><img src="https://img-blog.csdnimg.cn/20200622001437447.png"><br>在配置好一切摄像头应该配置的文件之后，运行在gazebo中显示模型的launch文件，出现了以上错误。<br>解决方法：<br>1、可能是urdf文件书写有错误，要注意urdf文件中不能加中文注释，第一行中不能加注释，打开urdf文件删掉相关注释即可。<br>2、安装joint-state-publisher-gui</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install ros-kinetic-joint-state-publisher-gui</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">sudo apt-get install ros-kinetic-joint-state-publisher-gui
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p><strong>二、问题二描述</strong><br><img src="https://img-blog.csdnimg.cn/20200622001915754.png"><br>在一个自己已经搭建好的world中加载我的机器人模型，发现爆出警告机器人模型已存在，并且显示出来的机器人模型是旧版的不带摄像头的模型。<br>原因：因为我在搭建模型的时候是在机器人模型已经存在在空世界的环境下搭建所以创建出来的world自带了model所以在构建world的时候一定要把模型删去。<br>解决方法：<br>重新在无模型的空世界下搭建world并保存。</p>
 <p><strong>三、参考文献</strong><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40081208/article/details/101533221">https://blog.csdn.net/qq_40081208/article/details/101533221</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/liuyuekelejic/article/details/105476063">https://blog.csdn.net/liuyuekelejic/article/details/105476063</a></p>

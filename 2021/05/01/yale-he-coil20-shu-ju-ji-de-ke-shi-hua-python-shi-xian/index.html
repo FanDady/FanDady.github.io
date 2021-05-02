@@ -485,7 +485,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    1.2k
                 </div>
                 
 
@@ -502,6 +502,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
         <!-- 代码块折行 -->
@@ -516,10 +519,90 @@
 <p>用Python来可视化数据集其实很简单当然也可以用C++或Matlab可视化也可以的，但是本人偏向于喜欢用Python来而且Python的优点很多接口也很多很适合用来做人工智能。可视化数据集没有什么困难的，当然如果是新手来说，可能你首先一定要很清楚什么是图像，图像处理的一些基本概念和内容然后再去操作会更好。其实很早就想把自己半年来学习的东西总结了只不过一直没有时间刚好寒假总算有时间把当时刚开始接触人工智能的一些基本的东西写下来记录下来，算是自己的一个笔记本或日记吧。</p>
 <p>先说下图像吧，一张图像是由像素点组成的，平常我们所看到的彩色图像有三个通道RGB三个也就是三原色通道，而黑白图像就只有一个通道，RGB图像其实就是三层图像叠加在一起组成彩色的图像，一种颜色有256个等级为0~255，如果是灰白图像那就只有一层0-255。一般在图像处理中把图像的像素组成一个矩阵，然后用矩阵的方法来处理图像对图像进行操作。其实图像处理我觉得数学真的很重要特别是线性代数，线性代数就是图像处理的基础其次就是高数，有了高数就可以在图像上试一下各种算法等。</p>
 <p>接下来上代码：<br>这是YALE数据集的可视化</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from scipy import io</span><br><span class="line">import cv2 as cv</span><br><span class="line"></span><br><span class="line">#像numpy，matplotlib，scipy，cv2这些包。直接下一个Anaconda就可以</span><br><span class="line">#Anaconda里面各种包都有，如果你是新手多百度看看什么是包，这些包有什么作用</span><br><span class="line">#遇到不会多百度</span><br><span class="line"></span><br><span class="line">x&#x3D;io.loadmat(&#39;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;Maching_Learning&#x2F;&#x2F;YALE人脸数据集可视化&#x2F;&#x2F;.idea&#x2F;&#x2F;Yale_32x32.mat&#39;)</span><br><span class="line">#载入YALE32mat文件的方法，得到的x是一个字典，可以print一下他的shape看一下里面的属性</span><br><span class="line">data&#x3D;[]</span><br><span class="line">print(x[&#39;fea&#39;].shape)</span><br><span class="line">#数据都存在了fea这个键值里面，print出来发现是165*1024说明有165张</span><br><span class="line">#图片每张图片都有1024个特征也就是1024个像素点</span><br><span class="line"></span><br><span class="line">num&#x3D;x[&#39;fea&#39;].shape[0]</span><br><span class="line">#得到总共样本的个数165张图片</span><br><span class="line"></span><br><span class="line">#print(x[&#39;fea&#39;].shape[0])</span><br><span class="line"></span><br><span class="line">for i in range(num):</span><br><span class="line">    img&#x3D;np.array(1024)#先创建一个一行1024列的数组</span><br><span class="line">    img&#x3D;x[&#39;fea&#39;][i]#存放每张图片数据</span><br><span class="line">    img.shape&#x3D;32,32#把这1x1024的数组reshape成32x32的矩阵</span><br><span class="line">    img&#x3D;img.T#矩阵转置</span><br><span class="line">    data.append(img)#把处理过大小的图片存到data列表里面</span><br><span class="line"></span><br><span class="line">data&#x3D;np.array(data)#把列表转成数组矩阵型</span><br><span class="line"></span><br><span class="line">out&#x3D;[0]*15       #我们想要搞出个15行11列的一整张图先处理行上</span><br><span class="line"></span><br><span class="line">for i in range(15):  #对每一行进行遍历</span><br><span class="line">   out[i]&#x3D;data[i*11]  #换行</span><br><span class="line">   for j in range(10):  #对每一列进行遍历</span><br><span class="line">       out[i]&#x3D;np.hstack((out[i],data[i*11+j+1]))#将每一次的图片合在一起，np.hstack是行方向的合并矩阵</span><br><span class="line"></span><br><span class="line">c&#x3D;out[0]     #上面得到了15个一行11列矩阵现在要把这15行都合在一起，np.vstack讲就是列方向上合并</span><br><span class="line">for i in range(14):</span><br><span class="line">    c&#x3D;np.vstack((c,out[i+1]))</span><br><span class="line">print(c.shape)</span><br><span class="line"></span><br><span class="line">cv.imshow(&quot;out&quot;,c)</span><br><span class="line">cv.waitKey(0)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">import numpy as np
+import matplotlib.pyplot as plt
+from scipy import io
+import cv2 as cv
+
+#像numpy，matplotlib，scipy，cv2这些包。直接下一个Anaconda就可以
+#Anaconda里面各种包都有，如果你是新手多百度看看什么是包，这些包有什么作用
+#遇到不会多百度
+
+x&#x3D;io.loadmat(&#39;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;Maching_Learning&#x2F;&#x2F;YALE人脸数据集可视化&#x2F;&#x2F;.idea&#x2F;&#x2F;Yale_32x32.mat&#39;)
+#载入YALE32mat文件的方法，得到的x是一个字典，可以print一下他的shape看一下里面的属性
+data&#x3D;[]
+print(x[&#39;fea&#39;].shape)
+#数据都存在了fea这个键值里面，print出来发现是165*1024说明有165张
+#图片每张图片都有1024个特征也就是1024个像素点
+
+num&#x3D;x[&#39;fea&#39;].shape[0]
+#得到总共样本的个数165张图片
+
+#print(x[&#39;fea&#39;].shape[0])
+
+for i in range(num):
+    img&#x3D;np.array(1024)#先创建一个一行1024列的数组
+    img&#x3D;x[&#39;fea&#39;][i]#存放每张图片数据
+    img.shape&#x3D;32,32#把这1x1024的数组reshape成32x32的矩阵
+    img&#x3D;img.T#矩阵转置
+    data.append(img)#把处理过大小的图片存到data列表里面
+
+data&#x3D;np.array(data)#把列表转成数组矩阵型
+
+out&#x3D;[0]*15       #我们想要搞出个15行11列的一整张图先处理行上
+
+for i in range(15):  #对每一行进行遍历
+   out[i]&#x3D;data[i*11]  #换行
+   for j in range(10):  #对每一列进行遍历
+       out[i]&#x3D;np.hstack((out[i],data[i*11+j+1]))#将每一次的图片合在一起，np.hstack是行方向的合并矩阵
+
+c&#x3D;out[0]     #上面得到了15个一行11列矩阵现在要把这15行都合在一起，np.vstack讲就是列方向上合并
+for i in range(14):
+    c&#x3D;np.vstack((c,out[i+1]))
+print(c.shape)
+
+cv.imshow(&quot;out&quot;,c)
+cv.waitKey(0)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>这是COIL20数据集的可视化</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from scipy import io</span><br><span class="line">import cv2 as cv</span><br><span class="line"></span><br><span class="line">x&#x3D;io.loadmat(&#39;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;Maching_Learning&#x2F;&#x2F;COIL20数据集可视化&#x2F;&#x2F;COIL20.mat&#39;)</span><br><span class="line">#导入数据集</span><br><span class="line">data&#x3D;[]</span><br><span class="line"></span><br><span class="line">num&#x3D;x[&#39;fea&#39;].shape[0]</span><br><span class="line">#得到数据样本的个数</span><br><span class="line"></span><br><span class="line">#print(x[&#39;fea&#39;].shape[0])</span><br><span class="line"></span><br><span class="line">for i in range(num):</span><br><span class="line">    img&#x3D;np.array(1024)</span><br><span class="line">    img&#x3D;x[&#39;fea&#39;][i]</span><br><span class="line">    img.shape&#x3D;32,32</span><br><span class="line">    img&#x3D;img.T</span><br><span class="line">    data.append(img)</span><br><span class="line"></span><br><span class="line">data&#x3D;np.array(data)</span><br><span class="line"></span><br><span class="line">out&#x3D;[0]*30</span><br><span class="line"></span><br><span class="line">for i in range(30):</span><br><span class="line">   out[i]&#x3D;data[i*48]</span><br><span class="line">   for j in range(47):</span><br><span class="line">       out[i]&#x3D;np.hstack((out[i],data[i*48+j+1]))</span><br><span class="line"></span><br><span class="line">c&#x3D;out[0]</span><br><span class="line">for i in range(29):</span><br><span class="line">    c&#x3D;np.vstack((c,out[i+1]))</span><br><span class="line">print(c.shape)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cv.imshow(&quot;out&quot;,c)</span><br><span class="line">cv.waitKey(0)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">import numpy as np
+import matplotlib.pyplot as plt
+from scipy import io
+import cv2 as cv
+
+x&#x3D;io.loadmat(&#39;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;Maching_Learning&#x2F;&#x2F;COIL20数据集可视化&#x2F;&#x2F;COIL20.mat&#39;)
+#导入数据集
+data&#x3D;[]
+
+num&#x3D;x[&#39;fea&#39;].shape[0]
+#得到数据样本的个数
+
+#print(x[&#39;fea&#39;].shape[0])
+
+for i in range(num):
+    img&#x3D;np.array(1024)
+    img&#x3D;x[&#39;fea&#39;][i]
+    img.shape&#x3D;32,32
+    img&#x3D;img.T
+    data.append(img)
+
+data&#x3D;np.array(data)
+
+out&#x3D;[0]*30
+
+for i in range(30):
+   out[i]&#x3D;data[i*48]
+   for j in range(47):
+       out[i]&#x3D;np.hstack((out[i],data[i*48+j+1]))
+
+c&#x3D;out[0]
+for i in range(29):
+    c&#x3D;np.vstack((c,out[i+1]))
+print(c.shape)
+
+
+cv.imshow(&quot;out&quot;,c)
+cv.waitKey(0)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>下面分别是YALE和COIL20的可视化出来图片<br><img src="https://img-blog.csdnimg.cn/20200204214224334.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br><img src="https://img-blog.csdnimg.cn/20200204214234404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"></p>
 
                 

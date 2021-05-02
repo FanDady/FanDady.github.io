@@ -514,6 +514,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
         <!-- 代码块折行 -->
@@ -525,17 +528,169 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>首先声明，这只是本人自己对HyperLPR代码的看法解析可能会有错还请多多谅解。<br>先贴上HyperLPR源码的链接<a target="_blank" rel="noopener" href="https://github.com/zeusees/HyperLPR">HyperLPR</a><br>其中最有用的其实就是HyperLPRLite.py这个代码文件，原来Github上的使用教程可能有点老了不太适用，这边附上一个简单的demo使用，创建一个新的文件夹然后把HyperLPRLite.py放进文件夹，再在新文件夹里面创建一个demo.py文件，如下（记得要把xml，两个h5文件一起放进去）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">from PIL import ImageFont</span><br><span class="line">from PIL import Image</span><br><span class="line">from PIL import ImageDraw</span><br><span class="line">import HyperLPRLite as pr</span><br><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line">import time</span><br><span class="line">import importlib</span><br><span class="line"></span><br><span class="line">def visual_draw_position(grr):</span><br><span class="line">    max&#x3D;0</span><br><span class="line">    model &#x3D; pr.LPR(&quot;model&#x2F;cascade.xml&quot;,&quot;model&#x2F;model12.h5&quot;,&quot;model&#x2F;ocr_plate_all_gru.h5&quot;)</span><br><span class="line">    for pstr,confidence,rect in model.SimpleRecognizePlateByE2E(grr):</span><br><span class="line">        if 1:</span><br><span class="line">            max&#x3D;confidence</span><br><span class="line">            grr &#x3D; drawRectBox(grr, rect, pstr+&quot; &quot;+str(round(confidence,3)))</span><br><span class="line">            print(&quot;车牌号:&quot;)</span><br><span class="line">            print(pstr)</span><br><span class="line">            print(&quot;置信度&quot;)</span><br><span class="line">            print(confidence)</span><br><span class="line">    cv2.imshow(&quot;image&quot;,grr)</span><br><span class="line">    cv2.waitKey(0)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">test_image &#x3D; cv2.imread(&quot;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;Cars&#x2F;&#x2F;30.jpg&quot;)</span><br><span class="line">visual_draw_position(test_image)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">import sys
+from PIL import ImageFont
+from PIL import Image
+from PIL import ImageDraw
+import HyperLPRLite as pr
+import cv2
+import numpy as np
+import time
+import importlib
+
+def visual_draw_position(grr):
+    max&#x3D;0
+    model &#x3D; pr.LPR(&quot;model&#x2F;cascade.xml&quot;,&quot;model&#x2F;model12.h5&quot;,&quot;model&#x2F;ocr_plate_all_gru.h5&quot;)
+    for pstr,confidence,rect in model.SimpleRecognizePlateByE2E(grr):
+        if 1:
+            max&#x3D;confidence
+            grr &#x3D; drawRectBox(grr, rect, pstr+&quot; &quot;+str(round(confidence,3)))
+            print(&quot;车牌号:&quot;)
+            print(pstr)
+            print(&quot;置信度&quot;)
+            print(confidence)
+    cv2.imshow(&quot;image&quot;,grr)
+    cv2.waitKey(0)
+
+
+test_image &#x3D; cv2.imread(&quot;C:&#x2F;&#x2F;Users&#x2F;&#x2F;dell&#x2F;&#x2F;Desktop&#x2F;&#x2F;Cars&#x2F;&#x2F;30.jpg&quot;)
+visual_draw_position(test_image)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>以上就可以简单的使用HyperLPR这个开源的车牌识别库</p>
 <p>现在进入正题我们来看一下HyperLPRLite.py这个重要文件里面写的内容<br>接下来我会按照代码执行的顺序来解读各个函数的作用<br>其实这份代码总共分为三大部分：粗定位，精定位，车牌信息识别<br>1、车牌粗定位</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">def computeSafeRegion(self,shape,bounding_rect):    #该函数是初步的框出车牌的大概位置属于粗定位出一个保险的包含车牌的大小</span><br><span class="line">    top &#x3D; bounding_rect[1] # y</span><br><span class="line">    bottom  &#x3D; bounding_rect[1] + bounding_rect[3] # y +  h</span><br><span class="line">    left &#x3D; bounding_rect[0] # x</span><br><span class="line">    right &#x3D;   bounding_rect[0] + bounding_rect[2] # x +  w</span><br><span class="line">    min_top &#x3D; 0</span><br><span class="line">    max_bottom &#x3D; shape[0]</span><br><span class="line">    min_left &#x3D; 0</span><br><span class="line">    max_right &#x3D; shape[1]</span><br><span class="line">    if top &lt; min_top:</span><br><span class="line">        top &#x3D; min_top</span><br><span class="line">    if left &lt; min_left:</span><br><span class="line">        left &#x3D; min_left</span><br><span class="line">    if bottom &gt; max_bottom:</span><br><span class="line">        bottom &#x3D; max_bottom</span><br><span class="line">    if right &gt; max_right:</span><br><span class="line">        right &#x3D; max_right</span><br><span class="line">    return [left,top,right-left,bottom-top]</span><br><span class="line"></span><br><span class="line">def cropImage(self,image,rect):    #框出车牌识别的区域</span><br><span class="line">    x, y, w, h &#x3D; self.computeSafeRegion(image.shape,rect)</span><br><span class="line">    return image[round(y):y+h,round(x):x+w]</span><br><span class="line"></span><br><span class="line">#返回所有车牌的box</span><br><span class="line">def detectPlateRough(self,image_gray,resize_h &#x3D; 720,en_scale &#x3D;1.08 ,top_bottom_padding_rate &#x3D; 0.05):</span><br><span class="line">    if top_bottom_padding_rate&gt;0.2:</span><br><span class="line">        print(&quot;error:top_bottom_padding_rate &gt; 0.2:&quot;,top_bottom_padding_rate)</span><br><span class="line">        exit(1)</span><br><span class="line">    height &#x3D; image_gray.shape[0]</span><br><span class="line">    padding &#x3D;    int(height*top_bottom_padding_rate)</span><br><span class="line">    scale &#x3D; image_gray.shape[1]&#x2F;float(image_gray.shape[0])</span><br><span class="line">    image &#x3D; cv2.resize(image_gray, (int(scale*resize_h), resize_h))</span><br><span class="line">    image_color_cropped &#x3D; image[padding:resize_h-padding,0:image_gray.shape[1]]</span><br><span class="line">    image_gray &#x3D; cv2.cvtColor(image_color_cropped,cv2.COLOR_RGB2GRAY)</span><br><span class="line">    watches &#x3D; self.watch_cascade.detectMultiScale(image_gray, en_scale, 2, minSize&#x3D;(36, 9),maxSize&#x3D;(36*40, 9*40))</span><br><span class="line">    cropped_images &#x3D; []</span><br><span class="line">    for (x, y, w, h) in watches:</span><br><span class="line">        x -&#x3D; w * 0.14</span><br><span class="line">        w +&#x3D; w * 0.28</span><br><span class="line">        y -&#x3D; h * 0.15</span><br><span class="line">        h +&#x3D; h * 0.3</span><br><span class="line">        cropped &#x3D; self.cropImage(image_color_cropped, (int(x), int(y), int(w), int(h)))</span><br><span class="line">        cropped_images.append([cropped,[x, y+padding, w, h]])</span><br><span class="line">    return cropped_images</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">def computeSafeRegion(self,shape,bounding_rect):    #该函数是初步的框出车牌的大概位置属于粗定位出一个保险的包含车牌的大小
+    top &#x3D; bounding_rect[1] # y
+    bottom  &#x3D; bounding_rect[1] + bounding_rect[3] # y +  h
+    left &#x3D; bounding_rect[0] # x
+    right &#x3D;   bounding_rect[0] + bounding_rect[2] # x +  w
+    min_top &#x3D; 0
+    max_bottom &#x3D; shape[0]
+    min_left &#x3D; 0
+    max_right &#x3D; shape[1]
+    if top &lt; min_top:
+        top &#x3D; min_top
+    if left &lt; min_left:
+        left &#x3D; min_left
+    if bottom &gt; max_bottom:
+        bottom &#x3D; max_bottom
+    if right &gt; max_right:
+        right &#x3D; max_right
+    return [left,top,right-left,bottom-top]
+
+def cropImage(self,image,rect):    #框出车牌识别的区域
+    x, y, w, h &#x3D; self.computeSafeRegion(image.shape,rect)
+    return image[round(y):y+h,round(x):x+w]
+
+#返回所有车牌的box
+def detectPlateRough(self,image_gray,resize_h &#x3D; 720,en_scale &#x3D;1.08 ,top_bottom_padding_rate &#x3D; 0.05):
+    if top_bottom_padding_rate&gt;0.2:
+        print(&quot;error:top_bottom_padding_rate &gt; 0.2:&quot;,top_bottom_padding_rate)
+        exit(1)
+    height &#x3D; image_gray.shape[0]
+    padding &#x3D;    int(height*top_bottom_padding_rate)
+    scale &#x3D; image_gray.shape[1]&#x2F;float(image_gray.shape[0])
+    image &#x3D; cv2.resize(image_gray, (int(scale*resize_h), resize_h))
+    image_color_cropped &#x3D; image[padding:resize_h-padding,0:image_gray.shape[1]]
+    image_gray &#x3D; cv2.cvtColor(image_color_cropped,cv2.COLOR_RGB2GRAY)
+    watches &#x3D; self.watch_cascade.detectMultiScale(image_gray, en_scale, 2, minSize&#x3D;(36, 9),maxSize&#x3D;(36*40, 9*40))
+    cropped_images &#x3D; []
+    for (x, y, w, h) in watches:
+        x -&#x3D; w * 0.14
+        w +&#x3D; w * 0.28
+        y -&#x3D; h * 0.15
+        h +&#x3D; h * 0.3
+        cropped &#x3D; self.cropImage(image_color_cropped, (int(x), int(y), int(w), int(h)))
+        cropped_images.append([cropped,[x, y+padding, w, h]])
+    return cropped_images<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这个地方的重点是detectPlateRough（）函数，首先开始的时候会对图像进行一些插补还有调整图像大小比例操作（其实个人认为这些不是很必要），然后核心的一部就是这个Cascade级联分类器的应用，这才是核心。这里的级联分类器是基于Haar+Adaboost构成的。很重要的就是之前的cascade.xml文件，这个文件里面存放的都是车牌的Haar特征。<br>在这里我们采用了cascade.xml 检测模型——目前效果最好的cascad级联检测模型。然后使用OpenCV的detectMultiscale的方法来对图像进行滑动窗口遍历寻找车牌，实现粗定位。detectMultiscale函数为多尺度多目标检测：多尺度：通常搜索目标的模板尺寸大小是固定的，但是不同图片大小不同，所以目标对象的大小也是不定的，所以多尺度即不断缩放图片大小（缩放到与模板匹配），通过模板滑动窗函数搜索匹配；同一副图片可能在不同尺度下都得到匹配值，所以多尺度检测函数detectMultiscale是多尺度合并的结果。</p>
 <p>简单来讲就是cascade.xml这个文件是通过很多的正样本车牌图片和负样本非车牌图片然后经过一个exe的程序可以创建出一个cascade.xml文件其中文件里Haar特征数据已经过Adaboost处理。最后通过这个xml文件就可以训练出一个级联分类器分类器的判别车牌标准是通过计算好多车牌特征后得出的一个阈值，大于这个阈值判别为车牌。这就是这个函数大概的功能，其中有一些框选图像中车牌的部分的功能比较基础此处不讲。<br><img src="https://img-blog.csdnimg.cn/20200317012359374.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>推荐原作者的讲解：<a target="_blank" rel="noopener" href="https://blog.csdn.net/relocy/article/details/78705662/">HyperLPR车牌识别技术算法之车牌粗定位与训练</a></p>
 <p>2、车牌精定位</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">def model_finemapping(self):</span><br><span class="line">    input &#x3D; Input(shape&#x3D;[16, 66, 3])  # change this shape to [None,None,3] to enable arbitraty shape input</span><br><span class="line">    x &#x3D; Conv2D(10, (3, 3), strides&#x3D;1, padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;conv1&#39;)(input)</span><br><span class="line">    x &#x3D; Activation(&quot;relu&quot;, name&#x3D;&#39;relu1&#39;)(x)</span><br><span class="line">    x &#x3D; MaxPool2D(pool_size&#x3D;2)(x)</span><br><span class="line">    x &#x3D; Conv2D(16, (3, 3), strides&#x3D;1, padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;conv2&#39;)(x)</span><br><span class="line">    x &#x3D; Activation(&quot;relu&quot;, name&#x3D;&#39;relu2&#39;)(x)</span><br><span class="line">    x &#x3D; Conv2D(32, (3, 3), strides&#x3D;1, padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;conv3&#39;)(x)</span><br><span class="line">    x &#x3D; Activation(&quot;relu&quot;, name&#x3D;&#39;relu3&#39;)(x)</span><br><span class="line">    x &#x3D; Flatten()(x)</span><br><span class="line">    output &#x3D; Dense(2,name &#x3D; &quot;dense&quot;)(x)</span><br><span class="line">    output &#x3D; Activation(&quot;relu&quot;, name&#x3D;&#39;relu4&#39;)(output)</span><br><span class="line">    model &#x3D; Model([input], [output])</span><br><span class="line">    return model</span><br><span class="line"></span><br><span class="line">def finemappingVertical(self,image,rect):</span><br><span class="line">    resized &#x3D; cv2.resize(image,(66,16))</span><br><span class="line">    resized &#x3D; resized.astype(np.float)&#x2F;255</span><br><span class="line">    #cv2.imshow(&quot;wd&quot;, resized)</span><br><span class="line">    res_raw&#x3D; self.modelFineMapping.predict(np.array([resized]))[0]#这里会返回两个值</span><br><span class="line">    print(self.modelFineMapping.predict(np.array([resized])))</span><br><span class="line">    res  &#x3D;res_raw*image.shape[1]</span><br><span class="line">    res &#x3D; res.astype(np.int)</span><br><span class="line">    H,T &#x3D; res</span><br><span class="line">    H-&#x3D;3</span><br><span class="line">    if H&lt;0:</span><br><span class="line">        H&#x3D;0</span><br><span class="line">    T+&#x3D;2;</span><br><span class="line">    if T&gt;&#x3D; image.shape[1]-1:</span><br><span class="line">        T&#x3D; image.shape[1]-1</span><br><span class="line">    rect[2] -&#x3D;  rect[2]*(1-res_raw[1] + res_raw[0])</span><br><span class="line">    rect[0]+&#x3D;res[0]</span><br><span class="line">    cv2.imshow(&quot;ww&quot;,image)</span><br><span class="line">    image &#x3D; image[:,H:T+2]</span><br><span class="line">    cv2.imshow(&quot;wd&quot;,image)</span><br><span class="line">    image &#x3D; cv2.resize(image, (int(136), int(36)))</span><br><span class="line"></span><br><span class="line">    return image,rect</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">def model_finemapping(self):
+    input &#x3D; Input(shape&#x3D;[16, 66, 3])  # change this shape to [None,None,3] to enable arbitraty shape input
+    x &#x3D; Conv2D(10, (3, 3), strides&#x3D;1, padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;conv1&#39;)(input)
+    x &#x3D; Activation(&quot;relu&quot;, name&#x3D;&#39;relu1&#39;)(x)
+    x &#x3D; MaxPool2D(pool_size&#x3D;2)(x)
+    x &#x3D; Conv2D(16, (3, 3), strides&#x3D;1, padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;conv2&#39;)(x)
+    x &#x3D; Activation(&quot;relu&quot;, name&#x3D;&#39;relu2&#39;)(x)
+    x &#x3D; Conv2D(32, (3, 3), strides&#x3D;1, padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;conv3&#39;)(x)
+    x &#x3D; Activation(&quot;relu&quot;, name&#x3D;&#39;relu3&#39;)(x)
+    x &#x3D; Flatten()(x)
+    output &#x3D; Dense(2,name &#x3D; &quot;dense&quot;)(x)
+    output &#x3D; Activation(&quot;relu&quot;, name&#x3D;&#39;relu4&#39;)(output)
+    model &#x3D; Model([input], [output])
+    return model
+
+def finemappingVertical(self,image,rect):
+    resized &#x3D; cv2.resize(image,(66,16))
+    resized &#x3D; resized.astype(np.float)&#x2F;255
+    #cv2.imshow(&quot;wd&quot;, resized)
+    res_raw&#x3D; self.modelFineMapping.predict(np.array([resized]))[0]#这里会返回两个值
+    print(self.modelFineMapping.predict(np.array([resized])))
+    res  &#x3D;res_raw*image.shape[1]
+    res &#x3D; res.astype(np.int)
+    H,T &#x3D; res
+    H-&#x3D;3
+    if H&lt;0:
+        H&#x3D;0
+    T+&#x3D;2;
+    if T&gt;&#x3D; image.shape[1]-1:
+        T&#x3D; image.shape[1]-1
+    rect[2] -&#x3D;  rect[2]*(1-res_raw[1] + res_raw[0])
+    rect[0]+&#x3D;res[0]
+    cv2.imshow(&quot;ww&quot;,image)
+    image &#x3D; image[:,H:T+2]
+    cv2.imshow(&quot;wd&quot;,image)
+    image &#x3D; cv2.resize(image, (int(136), int(36)))
+
+    return image,rect<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>model12.h5这是这部分左右边界回归模型<br>这里的精定位其实就是切掉原来上面粗定位出来车牌的多余部分，这里用到了一个CNN网络来实现左右边届切除点的预测也就是self.modelFineMapping.predict()这个函数他会返回两个值两个小数值，左右边界分别要切除多少。其实这部分我有点迷，我不太懂如何利用CNN网络来训练出得到两个切除边界的值，因为一般往往CNN网络用来做图像中分类较多，至少对我来说我很少看到CNN拿来做回归。所以在这一部分我不是很看懂。<br>这里附上原作者的：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Relocy/article/details/78705566">HyperLPR车牌识别技术算法之车牌精定位</a></p>
 <p>3、车牌信息识别</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">def fastdecode(self,y_pred):</span><br><span class="line">    results &#x3D; &quot;&quot;</span><br><span class="line">    confidence &#x3D; 0.0</span><br><span class="line">    table_pred &#x3D; y_pred.reshape(-1, len(chars)+1)</span><br><span class="line">    res &#x3D; table_pred.argmax(axis&#x3D;1)</span><br><span class="line">    for i,one in enumerate(res):</span><br><span class="line">        if one&lt;len(chars) and (i&#x3D;&#x3D;0 or (one!&#x3D;res[i-1])):</span><br><span class="line">            results+&#x3D; chars[one]</span><br><span class="line">            confidence+&#x3D;table_pred[i][one]</span><br><span class="line">    confidence&#x2F;&#x3D; len(results)</span><br><span class="line">    return results,confidence</span><br><span class="line"></span><br><span class="line">def model_seq_rec(self,model_path):</span><br><span class="line">    width, height, n_len, n_class &#x3D; 164, 48, 7, len(chars)+ 1  #输入层为164*48*3的tensor，类别有len（chars）+1个</span><br><span class="line">    rnn_size &#x3D; 256</span><br><span class="line">    input_tensor &#x3D; Input((164, 48, 3))</span><br><span class="line">    x &#x3D; input_tensor</span><br><span class="line">    base_conv &#x3D; 32</span><br><span class="line">    for i in range(3):                                    #一共做了三次卷积池化</span><br><span class="line">        x &#x3D; Conv2D(base_conv * (2 ** (i)), (3, 3))(x)     #卷积层</span><br><span class="line">        x &#x3D; BatchNormalization()(x)                       #统一量纲防止网络失衡</span><br><span class="line">        x &#x3D; Activation(&#39;relu&#39;)(x)                         #采用RELU激活函数</span><br><span class="line">        x &#x3D; MaxPooling2D(pool_size&#x3D;(2, 2))(x)             #池化层</span><br><span class="line">    conv_shape &#x3D; x.get_shape()</span><br><span class="line">    x &#x3D; Reshape(target_shape&#x3D;(int(conv_shape[1]), int(conv_shape[2] * conv_shape[3])))(x)</span><br><span class="line">    x &#x3D; Dense(32)(x)                                      #全连接层</span><br><span class="line">    x &#x3D; BatchNormalization()(x)</span><br><span class="line">    x &#x3D; Activation(&#39;relu&#39;)(x)</span><br><span class="line">    gru_1 &#x3D; GRU(rnn_size, return_sequences&#x3D;True, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;gru1&#39;)(x)</span><br><span class="line">    gru_1b &#x3D; GRU(rnn_size, return_sequences&#x3D;True, go_backwards&#x3D;True, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;gru1_b&#39;)(x)</span><br><span class="line">    gru1_merged &#x3D; add([gru_1, gru_1b])</span><br><span class="line">    gru_2 &#x3D; GRU(rnn_size, return_sequences&#x3D;True, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;gru2&#39;)(gru1_merged)</span><br><span class="line">    gru_2b &#x3D; GRU(rnn_size, return_sequences&#x3D;True, go_backwards&#x3D;True, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;gru2_b&#39;)(gru1_merged)</span><br><span class="line">    x &#x3D; concatenate([gru_2, gru_2b])</span><br><span class="line">    x &#x3D; Dropout(0.25)(x)                                   #正则化，扔掉25%的隐层神经元</span><br><span class="line">    x &#x3D; Dense(n_class, kernel_initializer&#x3D;&#39;he_normal&#39;, activation&#x3D;&#39;softmax&#39;)(x)  #再一次全连接，最后使用softmax输出类别数的网络</span><br><span class="line">    base_model &#x3D; Model(inputs&#x3D;input_tensor, outputs&#x3D;x)</span><br><span class="line">    base_model.load_weights(model_path)</span><br><span class="line">    return base_model</span><br><span class="line">    </span><br><span class="line">def recognizeOne(self,src):</span><br><span class="line">    x_tempx &#x3D; src</span><br><span class="line">    x_temp &#x3D; cv2.resize(x_tempx,( 164,48))</span><br><span class="line">    x_temp &#x3D; x_temp.transpose(1, 0, 2)</span><br><span class="line">    y_pred &#x3D; self.modelSeqRec.predict(np.array([x_temp]))</span><br><span class="line">    y_pred &#x3D; y_pred[:,2:,:]</span><br><span class="line">    return self.fastdecode(y_pred)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">def fastdecode(self,y_pred):
+    results &#x3D; &quot;&quot;
+    confidence &#x3D; 0.0
+    table_pred &#x3D; y_pred.reshape(-1, len(chars)+1)
+    res &#x3D; table_pred.argmax(axis&#x3D;1)
+    for i,one in enumerate(res):
+        if one&lt;len(chars) and (i&#x3D;&#x3D;0 or (one!&#x3D;res[i-1])):
+            results+&#x3D; chars[one]
+            confidence+&#x3D;table_pred[i][one]
+    confidence&#x2F;&#x3D; len(results)
+    return results,confidence
+
+def model_seq_rec(self,model_path):
+    width, height, n_len, n_class &#x3D; 164, 48, 7, len(chars)+ 1  #输入层为164*48*3的tensor，类别有len（chars）+1个
+    rnn_size &#x3D; 256
+    input_tensor &#x3D; Input((164, 48, 3))
+    x &#x3D; input_tensor
+    base_conv &#x3D; 32
+    for i in range(3):                                    #一共做了三次卷积池化
+        x &#x3D; Conv2D(base_conv * (2 ** (i)), (3, 3))(x)     #卷积层
+        x &#x3D; BatchNormalization()(x)                       #统一量纲防止网络失衡
+        x &#x3D; Activation(&#39;relu&#39;)(x)                         #采用RELU激活函数
+        x &#x3D; MaxPooling2D(pool_size&#x3D;(2, 2))(x)             #池化层
+    conv_shape &#x3D; x.get_shape()
+    x &#x3D; Reshape(target_shape&#x3D;(int(conv_shape[1]), int(conv_shape[2] * conv_shape[3])))(x)
+    x &#x3D; Dense(32)(x)                                      #全连接层
+    x &#x3D; BatchNormalization()(x)
+    x &#x3D; Activation(&#39;relu&#39;)(x)
+    gru_1 &#x3D; GRU(rnn_size, return_sequences&#x3D;True, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;gru1&#39;)(x)
+    gru_1b &#x3D; GRU(rnn_size, return_sequences&#x3D;True, go_backwards&#x3D;True, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;gru1_b&#39;)(x)
+    gru1_merged &#x3D; add([gru_1, gru_1b])
+    gru_2 &#x3D; GRU(rnn_size, return_sequences&#x3D;True, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;gru2&#39;)(gru1_merged)
+    gru_2b &#x3D; GRU(rnn_size, return_sequences&#x3D;True, go_backwards&#x3D;True, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;gru2_b&#39;)(gru1_merged)
+    x &#x3D; concatenate([gru_2, gru_2b])
+    x &#x3D; Dropout(0.25)(x)                                   #正则化，扔掉25%的隐层神经元
+    x &#x3D; Dense(n_class, kernel_initializer&#x3D;&#39;he_normal&#39;, activation&#x3D;&#39;softmax&#39;)(x)  #再一次全连接，最后使用softmax输出类别数的网络
+    base_model &#x3D; Model(inputs&#x3D;input_tensor, outputs&#x3D;x)
+    base_model.load_weights(model_path)
+    return base_model
+    
+def recognizeOne(self,src):
+    x_tempx &#x3D; src
+    x_temp &#x3D; cv2.resize(x_tempx,( 164,48))
+    x_temp &#x3D; x_temp.transpose(1, 0, 2)
+    y_pred &#x3D; self.modelSeqRec.predict(np.array([x_temp]))
+    y_pred &#x3D; y_pred[:,2:,:]
+    return self.fastdecode(y_pred)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>此处的车牌字符信息识别事实上是采用了OCR光学字符识别技术也就是在不分割字符的前提下能够识别出车牌一共七个字符。当然传统的车牌字符识别就是先分割字符然后再逐一使用分类算法进行识别。这种方法有个好处就是，仅仅需要较少的字符样本即可用于分类器的训练。在光照，相机条件好的情况下也能取得较好的效果。现在大多数商业车牌识别软件采用的也是这种方法。但是在某些恶劣的自然情况下，车牌字符的分割和识别变得尤其的困难，传统的方法并不能取得很好的结果。这时候我们就能考虑下是否能整体一起识别。当然我们注意到车牌字符的数量是固定的，对于中国车牌而言，车牌一直是7个字符。我们就可以采用多标签分类的方法直接输出多个标签。<br><img src="https://img-blog.csdnimg.cn/20200317011502799.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"></p>
 <p>但是这种方法有个很大的缺点，就是需要大量的样本，样本需要涵盖所有的省份和地区。这就为样本的收集造成的极大的困难</p>
 <p>这里采用CNN+GRU的方法来实现<br>GRU：（我个人理解CNN网络是初步的对字符进行分类，而GRU实际是并不常用在分类上，GRU更多用在预测处理上，我个人认为这里运用了双向GRU是为了在车牌图片较为模糊时，也可以大概预测出一个字符类别就是经过G双向GRU后可以更好的预测）<br>GRU(Gated Recurrent Unit) 是由 Cho, et al. (2014) 提出，是LSTM的一种变体。GRU的结构与LSTM很相似，LSTM有三个门，而GRU只有两个门且没有细胞状态，简化了LSTM的结构。而且在许多情况下，GRU与LSTM有同样出色的结果。GRU有更少的参数，因此相对容易训练且过拟合问题要轻一点。<br>下图展示了GRU的网络结构，GRU的网络结构和LSTM的网络结构很相似，LSTM中含有三个门结构和细胞状态，而GRU只有两个门结构：更新门和重置门，分别为图中的z_t和r_t，结构上比LSTM简单。把GRU看着LSTM的变体，相当于取消了LSTM中的cell state，只使用了hidden state,并且使用update gate更新门来替换LSTM中的输入们和遗忘门，取消了LSTM中的输出门，新增了reset gate重置门。这样做的好处是在达到LSTM相近的效果下，GRU参数更少，训练的计算开销更小，训练速度更快。</p>

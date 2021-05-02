@@ -502,6 +502,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
         <!-- 代码块折行 -->
@@ -514,23 +517,24 @@
             <div id="articleContent">
                 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记录使用Git命令上传工程项目到个人Github上，怕自己以后会忘记，操作系统是在Windows上进行，学会Windows操作，Linux上自然会，都差不多。</p>
 <p><strong>一、下载Git</strong><br>百度搜索Git，到官网上下载Git对应版本型号<br><strong>二、在本地的Github个人中心创建仓库</strong><br><img src="https://img-blog.csdnimg.cn/20200721230532710.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br><strong>三、配置SSH</strong><br>1、在需要上传的工程文件夹下面右键点击Git bash here输入命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C  &quot;邮箱&quot; </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">ssh-keygen -t rsa -C  &quot;邮箱&quot; <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>2、进入SSH密钥存放地址我的电脑——C盘——用户——.ssh/文件夹，打开id_ras.pub文件，如果打不开就用记事本打开，然后复制里面的所有内容<br>3、点击New SSH Key然后创建好后将复制的内容粘贴到Github的SSH密钥栏处<br><img src="https://img-blog.csdnimg.cn/20200721231037327.png"><br><img src="https://img-blog.csdnimg.cn/20200721231129993.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>4、检查密钥是否配置成功，在刚刚的Git bash here的命令行下面输入</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">ssh -T git@github.com<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><strong>四、上传工程文件</strong><br>这些操作都是在要上传的工程文件夹下面，就在工程文件的根目录下就行<br>1、配置账号名和邮箱</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.email &quot;邮箱&quot;</span><br><span class="line">git config --global user.name ‘名字’</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">git config --global user.email &quot;邮箱&quot;
+git config --global user.name ‘名字’<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>2、初始化Git空间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">git init<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>3、上传文件到暂存区（如果上传工程目录下所有文件就是add .如果上传某个文件就是add xxxx.xx）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">git add .<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>4、暂存区的文件上传到Git仓库空间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;此处输入项目注释语句&quot;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">git commit -m &quot;此处输入项目注释语句&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>5、建立Github仓库和工程文件夹下Git的联系（xxxxxxxx是指Github建立仓库的SSH地址）<br><img src="https://img-blog.csdnimg.cn/20200721231902883.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin xxxxxxxxxxxx</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">git remote add origin xxxxxxxxxxxx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>6、克隆Readme文档到本低目录下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull --rebase origin master</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">git pull --rebase origin master<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>7、上传文件到Github上</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">git push -u origin master<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><strong>五、参考文献</strong><br><img src="https://img-blog.csdnimg.cn/20200930163208745.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Amywj/p/13219108.html">使用Git上传工程项目</a></p>
 

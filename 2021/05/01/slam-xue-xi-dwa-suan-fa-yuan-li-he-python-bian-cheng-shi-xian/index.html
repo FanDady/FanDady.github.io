@@ -506,6 +506,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
         <!-- 代码块折行 -->
@@ -524,7 +527,113 @@
 <p><strong>之后</strong>速度采样完后我们就可以开始计算模拟轨迹上各个点的位置等相关信息了。<br>位置的计算其实很简单就是如下图计算公式：<br><img src="https://img-blog.csdnimg.cn/2020062110452552.png"><br>这里的v就是线速度，w就是角速度，这里可能很多人会好奇为什么这里计算位置使用直线方式计算，这是因为我们一条模拟轨迹上所设定的时间间隔很小所以可以近似把它看作直线来计算，同时这也使得代码计算更为方便快捷，那这里我再偷一张图。<br><img src="https://img-blog.csdnimg.cn/20200621105935889.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>这里可能大家会看到机器人还有个Yrobot方向速度，大家其实可以不用管，因为一般正常的轮子都是只能实现前后方向的位置改变，但是可能有些人会接触到麦克纳姆轮也就是全向移动轮，它可以做到前后左右位置改变，所以其实这里我们大可不必考虑Y方向速度，如果你真想知道你就在百度上随便搜一篇DWA算法你就会在里面找到相关计算方法，但是这里我并不想阐述计算方法。</p>
 <p><strong>最后</strong>，讲到这里DWA算法基本的东西其实已经全部讲完了，其实这个算法并不会太难，如果看不懂就多读几遍，最后的步骤就是不断地循环循环找最优轨迹并沿着最优轨迹走然后再速度采样再模拟轨迹再选择最优轨迹走，直到到达某个位置和目标点的距离不超过自己设定的范围为止。对了，刚刚上面只讲了评价函数但是我给忘了讲评价分的计算，其实也很简单，最简单的方法就是把三个评价函数计算出来的结果全部相加起来当然这是最简单的计算方法，实际上我们不能这样，因为每个参量有大有小，可能因为某个评价函数的结果过大直接覆盖了其他两个，所以我们还是要进行平滑处理的操作，这里我要再去偷个公式图。<br><img src="https://img-blog.csdnimg.cn/20200621105953621.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>这个图里面的head就是距离目标点距离的评价值，dist就是距离障碍物的，velocity就是速度，其实总而言之就是归一化呗，没什么特别深奥的东西，最后的评价分计算公式就是把这归一化后的三个值相加起来，当然可以相应的在每个评价值前面乘上权重系数，也就是偏重于哪个评价值，最后计算公式就是<br><img src="https://img-blog.csdnimg.cn/20200621110256507.png"></p>
 <p><strong>二、DWA算法Python实现代码</strong><br>首先说明一下这个代码我是参考给出的标准的DWA算法实现，但是我是在自己完全理解后自己看着DWA公式来写出算法，代码的每一步基本都有注释。<br>这份代码里面可能大家看到，我没有用权重系数和归一化，这是因为我是在坐标轴上一个小区域直接模拟，所以计算量都不是很大，所以我就没有用到，在真正以后实际情况里，还是要按照公式来做</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">from math import *</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line"></span><br><span class="line">#参数设置</span><br><span class="line">V_Min &#x3D; -0.5            #最小速度</span><br><span class="line">V_Max &#x3D; 3.0             #最大速度</span><br><span class="line">W_Min &#x3D; -50*pi&#x2F;180.0    #最小角速度</span><br><span class="line">W_Max &#x3D; 50*pi&#x2F;180.0     #最大角速度</span><br><span class="line">Va &#x3D; 0.5                #加速度</span><br><span class="line">Wa &#x3D; 30.0*pi&#x2F;180.0      #角加速度</span><br><span class="line">Vreso &#x3D; 0.01            #速度分辨率</span><br><span class="line">Wreso &#x3D; 0.1*pi&#x2F;180.0    #角速度分辨率</span><br><span class="line">radius &#x3D; 1              #机器人模型半径</span><br><span class="line">Dt &#x3D; 0.1                #时间间隔</span><br><span class="line">Predict_Time &#x3D; 4.0      #模拟轨迹的持续时间</span><br><span class="line">alpha &#x3D; 1.0             #距离目标点的评价函数的权重系数</span><br><span class="line">Belta &#x3D; 1.0             #速度评价函数的权重系数</span><br><span class="line">Gamma &#x3D; 1.0             #距离障碍物距离的评价函数的权重系数</span><br><span class="line"></span><br><span class="line">#障碍物</span><br><span class="line">Obstacle&#x3D;np.array([[0,10],[2,10],[4,10],[6,10],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[10,7],[10,9],[10,11],[10,13]])</span><br><span class="line">#Obstacle &#x3D; np.array([[0, 2]])</span><br><span class="line"></span><br><span class="line">#距离目标点的评价函数</span><br><span class="line">def Goal_Cost(Goal,Pos):</span><br><span class="line">    return sqrt((Pos[-1,0]-Goal[0])**2+(Pos[-1,1]-Goal[1])**2)</span><br><span class="line"></span><br><span class="line">#速度评价函数</span><br><span class="line">def Velocity_Cost(Pos):</span><br><span class="line">    return V_Max-Pos[-1,3]</span><br><span class="line"></span><br><span class="line">#距离障碍物距离的评价函数</span><br><span class="line">def Obstacle_Cost(Pos,Obstacle):</span><br><span class="line">    MinDistance &#x3D; float(&#39;Inf&#39;)          #初始化时候机器人周围无障碍物所以最小距离设为无穷</span><br><span class="line">    for i in range(len(Pos)):           #对每一个位置点循环</span><br><span class="line">        for j in range(len(Obstacle)):  #对每一个障碍物循环</span><br><span class="line">            Current_Distance &#x3D; sqrt((Pos[i,0]-Obstacle[j,0])**2+(Pos[i,1]-Obstacle[j,1])**2)  #求出每个点和每个障碍物距离</span><br><span class="line">            if Current_Distance &lt; radius:            #如果小于机器人自身的半径那肯定撞到障碍物了返回的评价值自然为无穷</span><br><span class="line">                return float(&#39;Inf&#39;)</span><br><span class="line">            if Current_Distance &lt; MinDistance:</span><br><span class="line">                MinDistance&#x3D;Current_Distance         #得到点和障碍物距离的最小</span><br><span class="line"></span><br><span class="line">    return 1&#x2F;MinDistance</span><br><span class="line"></span><br><span class="line">#速度采用</span><br><span class="line">def V_Range(X):</span><br><span class="line">    Vmin_Actual &#x3D; X[3]-Va*Dt          #实际在dt时间间隔内的最小速度</span><br><span class="line">    Vmax_actual &#x3D; X[3]+Va*Dt          #实际载dt时间间隔内的最大速度</span><br><span class="line">    Wmin_Actual &#x3D; X[4]-Wa*Dt          #实际在dt时间间隔内的最小角速度</span><br><span class="line">    Wmax_Actual &#x3D; X[4]+Wa*Dt          #实际在dt时间间隔内的最大角速度</span><br><span class="line">    VW &#x3D; [max(V_Min,Vmin_Actual),min(V_Max,Vmax_actual),max(W_Min,Wmin_Actual),min(W_Max,Wmax_Actual)]  #因为前面本身定义了机器人最小最大速度所以这里取交集</span><br><span class="line">    return VW</span><br><span class="line"></span><br><span class="line">#一条模拟轨迹路线中的位置，速度计算</span><br><span class="line">def Motion(X,u,dt):</span><br><span class="line">    X[0]+&#x3D;u[0]*dt*cos(X[2])           #x方向上位置</span><br><span class="line">    X[1]+&#x3D;u[0]*dt*sin(X[2])           #y方向上位置</span><br><span class="line">    X[2]+&#x3D;u[1]*dt                     #角度变换</span><br><span class="line">    X[3]&#x3D;u[0]                         #速度</span><br><span class="line">    X[4]&#x3D;u[1]                         #角速度</span><br><span class="line">    return X</span><br><span class="line"></span><br><span class="line">#一条模拟轨迹的完整计算</span><br><span class="line">def Calculate_Traj(X,u):</span><br><span class="line">    Traj&#x3D;np.array(X)</span><br><span class="line">    Xnew&#x3D;np.array(X)</span><br><span class="line">    time&#x3D;0</span><br><span class="line">    while time &lt;&#x3D;Predict_Time:        #一条模拟轨迹时间</span><br><span class="line">        Xnew&#x3D;Motion(Xnew,u,Dt)</span><br><span class="line">        Traj&#x3D;np.vstack((Traj,Xnew))   #一条完整模拟轨迹中所有信息集合成一个矩阵</span><br><span class="line">        time&#x3D;time+Dt</span><br><span class="line">    return Traj</span><br><span class="line"></span><br><span class="line">#DWA核心计算</span><br><span class="line">def dwa_Core(X,u,goal,obstacles):</span><br><span class="line">    vw&#x3D;V_Range(X)</span><br><span class="line">    best_traj&#x3D;np.array(X)</span><br><span class="line">    min_score&#x3D;10000.0                 #随便设置一下初始的最小评价分数</span><br><span class="line">    for v in np.arange(vw[0], vw[1], Vreso):         #对每一个线速度循环</span><br><span class="line">        for w in np.arange(vw[2], vw[3], Wreso):     #对每一个角速度循环</span><br><span class="line">            traj&#x3D;Calculate_Traj(X,[v,w])</span><br><span class="line">            goal_score&#x3D;Goal_Cost(goal,traj)</span><br><span class="line">            vel_score&#x3D;Velocity_Cost(traj)</span><br><span class="line">            obs_score&#x3D;Obstacle_Cost(traj,Obstacle)</span><br><span class="line">            score&#x3D;goal_score+vel_score+obs_score</span><br><span class="line">            if min_score&gt;&#x3D;score:                    #得出最优评分和轨迹</span><br><span class="line">                min_score&#x3D;score</span><br><span class="line">                u&#x3D;np.array([v,w])</span><br><span class="line">                best_traj&#x3D;traj</span><br><span class="line"></span><br><span class="line">    return u,best_traj</span><br><span class="line"></span><br><span class="line">x&#x3D;np.array([2,2,45*pi&#x2F;180,0,0])                          #设定初始位置，角速度，线速度</span><br><span class="line">u&#x3D;np.array([0,0])                                        #设定初始速度</span><br><span class="line">goal&#x3D;np.array([8,8])                                     #设定目标位置</span><br><span class="line">global_tarj&#x3D;np.array(x)</span><br><span class="line">for i in range(1000):                                     #循环1000次，这里可以直接改成while的直到循环到目标位置</span><br><span class="line">    u,current&#x3D;dwa_Core(x,u,goal,Obstacle)</span><br><span class="line">    x&#x3D;Motion(x,u,Dt)</span><br><span class="line">    global_tarj&#x3D;np.vstack((global_tarj,x))                 #存储最优轨迹为一个矩阵形式每一行存放每一条最有轨迹的信息</span><br><span class="line">    if sqrt((x[0]-goal[0])**2+(x[1]-goal[1])**2)&lt;&#x3D;radius:  #判断是否到达目标点</span><br><span class="line">        print(&#39;Arrived&#39;)</span><br><span class="line">        break</span><br><span class="line"></span><br><span class="line">plt.plot(global_tarj[:,0],global_tarj[:,1],&#39;*r&#39;,Obstacle[0:3,0],Obstacle[0:3,1],&#39;-g&#39;,Obstacle[4:9,0],Obstacle[4:9,1],&#39;-g&#39;,Obstacle[10:13,0],Obstacle[10:13,1],&#39;-g&#39;)  #画出最优轨迹的路线</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">import numpy as np
+from math import *
+import matplotlib.pyplot as plt
+
+#参数设置
+V_Min &#x3D; -0.5            #最小速度
+V_Max &#x3D; 3.0             #最大速度
+W_Min &#x3D; -50*pi&#x2F;180.0    #最小角速度
+W_Max &#x3D; 50*pi&#x2F;180.0     #最大角速度
+Va &#x3D; 0.5                #加速度
+Wa &#x3D; 30.0*pi&#x2F;180.0      #角加速度
+Vreso &#x3D; 0.01            #速度分辨率
+Wreso &#x3D; 0.1*pi&#x2F;180.0    #角速度分辨率
+radius &#x3D; 1              #机器人模型半径
+Dt &#x3D; 0.1                #时间间隔
+Predict_Time &#x3D; 4.0      #模拟轨迹的持续时间
+alpha &#x3D; 1.0             #距离目标点的评价函数的权重系数
+Belta &#x3D; 1.0             #速度评价函数的权重系数
+Gamma &#x3D; 1.0             #距离障碍物距离的评价函数的权重系数
+
+#障碍物
+Obstacle&#x3D;np.array([[0,10],[2,10],[4,10],[6,10],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[10,7],[10,9],[10,11],[10,13]])
+#Obstacle &#x3D; np.array([[0, 2]])
+
+#距离目标点的评价函数
+def Goal_Cost(Goal,Pos):
+    return sqrt((Pos[-1,0]-Goal[0])**2+(Pos[-1,1]-Goal[1])**2)
+
+#速度评价函数
+def Velocity_Cost(Pos):
+    return V_Max-Pos[-1,3]
+
+#距离障碍物距离的评价函数
+def Obstacle_Cost(Pos,Obstacle):
+    MinDistance &#x3D; float(&#39;Inf&#39;)          #初始化时候机器人周围无障碍物所以最小距离设为无穷
+    for i in range(len(Pos)):           #对每一个位置点循环
+        for j in range(len(Obstacle)):  #对每一个障碍物循环
+            Current_Distance &#x3D; sqrt((Pos[i,0]-Obstacle[j,0])**2+(Pos[i,1]-Obstacle[j,1])**2)  #求出每个点和每个障碍物距离
+            if Current_Distance &lt; radius:            #如果小于机器人自身的半径那肯定撞到障碍物了返回的评价值自然为无穷
+                return float(&#39;Inf&#39;)
+            if Current_Distance &lt; MinDistance:
+                MinDistance&#x3D;Current_Distance         #得到点和障碍物距离的最小
+
+    return 1&#x2F;MinDistance
+
+#速度采用
+def V_Range(X):
+    Vmin_Actual &#x3D; X[3]-Va*Dt          #实际在dt时间间隔内的最小速度
+    Vmax_actual &#x3D; X[3]+Va*Dt          #实际载dt时间间隔内的最大速度
+    Wmin_Actual &#x3D; X[4]-Wa*Dt          #实际在dt时间间隔内的最小角速度
+    Wmax_Actual &#x3D; X[4]+Wa*Dt          #实际在dt时间间隔内的最大角速度
+    VW &#x3D; [max(V_Min,Vmin_Actual),min(V_Max,Vmax_actual),max(W_Min,Wmin_Actual),min(W_Max,Wmax_Actual)]  #因为前面本身定义了机器人最小最大速度所以这里取交集
+    return VW
+
+#一条模拟轨迹路线中的位置，速度计算
+def Motion(X,u,dt):
+    X[0]+&#x3D;u[0]*dt*cos(X[2])           #x方向上位置
+    X[1]+&#x3D;u[0]*dt*sin(X[2])           #y方向上位置
+    X[2]+&#x3D;u[1]*dt                     #角度变换
+    X[3]&#x3D;u[0]                         #速度
+    X[4]&#x3D;u[1]                         #角速度
+    return X
+
+#一条模拟轨迹的完整计算
+def Calculate_Traj(X,u):
+    Traj&#x3D;np.array(X)
+    Xnew&#x3D;np.array(X)
+    time&#x3D;0
+    while time &lt;&#x3D;Predict_Time:        #一条模拟轨迹时间
+        Xnew&#x3D;Motion(Xnew,u,Dt)
+        Traj&#x3D;np.vstack((Traj,Xnew))   #一条完整模拟轨迹中所有信息集合成一个矩阵
+        time&#x3D;time+Dt
+    return Traj
+
+#DWA核心计算
+def dwa_Core(X,u,goal,obstacles):
+    vw&#x3D;V_Range(X)
+    best_traj&#x3D;np.array(X)
+    min_score&#x3D;10000.0                 #随便设置一下初始的最小评价分数
+    for v in np.arange(vw[0], vw[1], Vreso):         #对每一个线速度循环
+        for w in np.arange(vw[2], vw[3], Wreso):     #对每一个角速度循环
+            traj&#x3D;Calculate_Traj(X,[v,w])
+            goal_score&#x3D;Goal_Cost(goal,traj)
+            vel_score&#x3D;Velocity_Cost(traj)
+            obs_score&#x3D;Obstacle_Cost(traj,Obstacle)
+            score&#x3D;goal_score+vel_score+obs_score
+            if min_score&gt;&#x3D;score:                    #得出最优评分和轨迹
+                min_score&#x3D;score
+                u&#x3D;np.array([v,w])
+                best_traj&#x3D;traj
+
+    return u,best_traj
+
+x&#x3D;np.array([2,2,45*pi&#x2F;180,0,0])                          #设定初始位置，角速度，线速度
+u&#x3D;np.array([0,0])                                        #设定初始速度
+goal&#x3D;np.array([8,8])                                     #设定目标位置
+global_tarj&#x3D;np.array(x)
+for i in range(1000):                                     #循环1000次，这里可以直接改成while的直到循环到目标位置
+    u,current&#x3D;dwa_Core(x,u,goal,Obstacle)
+    x&#x3D;Motion(x,u,Dt)
+    global_tarj&#x3D;np.vstack((global_tarj,x))                 #存储最优轨迹为一个矩阵形式每一行存放每一条最有轨迹的信息
+    if sqrt((x[0]-goal[0])**2+(x[1]-goal[1])**2)&lt;&#x3D;radius:  #判断是否到达目标点
+        print(&#39;Arrived&#39;)
+        break
+
+plt.plot(global_tarj[:,0],global_tarj[:,1],&#39;*r&#39;,Obstacle[0:3,0],Obstacle[0:3,1],&#39;-g&#39;,Obstacle[4:9,0],Obstacle[4:9,1],&#39;-g&#39;,Obstacle[10:13,0],Obstacle[10:13,1],&#39;-g&#39;)  #画出最优轨迹的路线
+plt.show()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>效果展示<br><img src="https://img-blog.csdnimg.cn/20200621195652606.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br><strong>三、结语和总结</strong><br>其实看不懂的东西只要多看几遍多耐心的琢磨就肯定会明白其中的道理，多看几遍真的没有错。只要自己不要自暴自弃就好，以前老师总说不懂的知识多看几遍，我一直不放在心上，长大后才发现老师说的真的是对的，很多事情也是如此，多看多做几遍，简单的事情重复做，重复的事情坚持做！</p>
 <p><strong>四、参考文献</strong><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011600592/article/details/54613717">https://blog.csdn.net/u011600592/article/details/54613717</a><br><a target="_blank" rel="noopener" href="https://scm_mos.gitlab.io/motion-planner/dwa-local-planner/">https://scm_mos.gitlab.io/motion-planner/dwa-local-planner/</a></p>
 
