@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Hexo:基于Hexo框架搭建Github主页</title>
+      <link href="2021/05/04/hexo-ji-yu-hexo-kuang-jia-da-jian-github-zhu-ye/"/>
+      <url>2021/05/04/hexo-ji-yu-hexo-kuang-jia-da-jian-github-zhu-ye/</url>
+      
+        <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文主要是在GitHub’s Page的基础上使用Hexo开源框架对Page进行优化，并且使用自定义域名来访问GitHub’s Page，所以此个人主页的搭建是在自己的Github账号上，服务器自然也是在Github那边，只不过我们要做的就是对原来的Github’s Page进行优化而已。</p><h2 id="一、安装Git"><a href="#一、安装Git" class="headerlink" title="一、安装Git"></a>一、安装Git</h2><p>自行在<a href="https://git-scm.com/">Git官网</a>下载相对应版本的Git</p><h2 id="二、安装Node-js"><a href="#二、安装Node-js" class="headerlink" title="二、安装Node.js"></a>二、安装Node.js</h2><p><strong>①下载安装</strong><br>Hexo开源项目是基于Node.js，所以，首先需要电脑上安装Node.js和配置系统路径。<br><a href="https://nodejs.org/en/">Node.js下载地址</a><br>关于Node.js的路径配置可能会有点小坑，可能同学们在网上找的Node.js的配置教程都是比较早的，所以很可能已经过时，笔者在后续安装中出现的问题归根结底主要由于Node.js的系统路径配置，这里给出我参考的认为能较好解决配置问题的一篇博文。<br><a href="https://blog.csdn.net/qq_40593308/article/details/110559838?spm=1001.2014.3001.5506">Node.js的安装与配置</a><br><strong>②验证安装的成功性</strong></p><pre class="line-numbers language-none"><code class="language-none">node -v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><pre class="line-numbers language-none"><code class="language-none">npm -v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>若各出现版本号即表示安装成功</p><h2 id="三、安装npm的国内镜像cnpm"><a href="#三、安装npm的国内镜像cnpm" class="headerlink" title="三、安装npm的国内镜像cnpm"></a>三、安装npm的国内镜像cnpm</h2><p>由于npm命令较为常用并用来下载Hexo所需的一些插件但是国内直接使用npmmingling下载速度较慢，所以这里提供国内淘宝云镜像，下次要用npm命令的时候就可以用cnpm代替。</p><p><strong>①下载cnpm淘宝云镜像</strong></p><pre class="line-numbers language-none"><code class="language-none">npm config set registry https:&#x2F;&#x2F;registry.npm.taobao.org<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><strong>②验证cnpm安装的成功性</strong></p><pre class="line-numbers language-none"><code class="language-none">npm config get registry<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>若返回<a href="https://registry.npm.taobao.org则表示安装成功/">https://registry.npm.taobao.org则表示安装成功</a></p><h2 id="四、安装Hexo框架"><a href="#四、安装Hexo框架" class="headerlink" title="四、安装Hexo框架"></a>四、安装Hexo框架</h2><p><strong>①使用cnpm下载Hexo</strong></p><pre class="line-numbers language-none"><code class="language-none">cnpm install -g hexo-cli<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><strong>②验证Hexo框架安装成功性</strong></p><pre class="line-numbers language-none"><code class="language-none">hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="五、初始化个人主页项目"><a href="#五、初始化个人主页项目" class="headerlink" title="五、初始化个人主页项目"></a><strong>五、初始化个人主页项目</strong></h2><p><strong>①在本地电脑端找个位置新建一个文件夹用来存放项目文件</strong><br><strong>②进入新建的文件夹然后右键点击<code>git bash here</code></strong><br><strong>③输入以下命令来初始化</strong></p><pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 初始化项目hexo init<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 运行主页，可以提前在http:&#x2F;&#x2F;localhost:4000上预览主页效果hexo s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><h2 id="六、Github创建个人主页项目"><a href="#六、Github创建个人主页项目" class="headerlink" title="六、Github创建个人主页项目"></a>六、Github创建个人主页项目</h2><p><strong>①点击新建一个repositories，切记项目命名为自己的username.github.io</strong><br><strong>②在上面新建的文件夹的目录下面点击<code>git bash here</code>进入命令行</strong><br><strong>③安装部署工具</strong></p><pre class="line-numbers language-none"><code class="language-none">cnpm install --save hexo-deployer-git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><strong>④修改blog下面的config.yml文件</strong></p><p>找到config.yml最下面的deploy部分，改为如下代码，注意修改自己的username使此项目对应到自己的GitHub项目上去</p><pre class="line-numbers language-none"><code class="language-none">deploy:  type: git  repo: https:&#x2F;&#x2F;github.com&#x2F;username&#x2F;username.github.io.git  branch: master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><p><strong>⑤部署上传Github</strong></p><p>修改优化自己的主页后通过以下命令来控制GitHub’s Page的生成和修改</p><pre class="line-numbers language-none"><code class="language-none">hexo clean<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><pre class="line-numbers language-none"><code class="language-none">hexo g<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><pre class="line-numbers language-none"><code class="language-none">hexo d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="七、自定义域名绑定"><a href="#七、自定义域名绑定" class="headerlink" title="七、自定义域名绑定"></a>七、自定义域名绑定</h2><p><strong>①在阿里云（其他平台也可以）上购买域名</strong><br><strong>②买完域名后需要解析到自己的Github项目中</strong></p><pre class="line-numbers language-none"><code class="language-none">ping username.github.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>得到项目的IP地址后，进入阿里云解析自己的域名到一个IPV4地址，解析记录设置两个分别用www和@开头作为解析前缀，TTL生效时间设置为10</p><p><strong>③新增CNAME文件</strong></p><p>在原来创建的文件夹即/hexo/source/创建一个CNAME文件（无后缀名文件），在文件里面写下在阿里云购买的域名。</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>[1] <a href="http://weimumu.top/2020/ckjco6flf00022gnl4c163vst/">Hexo+Github从0搭建个人博客</a><br>[2] <a href="https://rika0-0.github.io/2020/04/08/%E6%9C%80%E5%BF%AB%E9%80%9F%E5%9C%B0%E6%90%AD%E5%BB%BA%E7%82%AB%E4%B8%BD%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99or%E5%8D%9A%E5%AE%A2/">最快速搭建个人博客</a><br>[3] <a href="https://hexo.io/zh-cn/">Hexo官网</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Hexo </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>TX2刷机Jetpack4.2教程</title>
       <link href="2021/05/01/tx2-shua-ji-jetpack4-2-jiao-cheng/"/>
       <url>2021/05/01/tx2-shua-ji-jetpack4-2-jiao-cheng/</url>
