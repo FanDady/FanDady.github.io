@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>Linux下Clash配置教程</title>
+      <link href="2021/05/15/linux-xia-clash-pei-zhi-jiao-cheng/"/>
+      <url>2021/05/15/linux-xia-clash-pei-zhi-jiao-cheng/</url>
+      
+        <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文是在Ubuntu16.04系统amd64架构上进行实验，同时也可以适用于其他的系统或架构</p><h2 id="一、安装Clash"><a href="#一、安装Clash" class="headerlink" title="一、安装Clash"></a>一、安装Clash</h2><p>在Clash的GitHub<a href="https://github.com/Dreamacro/clash/releases">下载地址</a>上安装相对应版本和系统架构的Clash</p><h2 id="二、配置相关文件"><a href="#二、配置相关文件" class="headerlink" title="二、配置相关文件"></a>二、配置相关文件</h2><p><strong>①配置config.yml文件</strong><br>在自己的机场里找到clash的订阅地址，然后复制到网址栏里面即可下载yml文件，然后复制到存放clash的目录之下<br><strong>②配置Country.mmdb文件</strong><br>该文件是全球IP的库，即需要这个库才可以访问国外下载地址可以访问GEOIP官网<a href="https://dev.maxmind.com/geoip/geoip2/geoip2-city-country-csv-databases/">mmdb文件</a><br>当然也可以从这里现成的下载<a href="https://asset.10101.io/externalLinksController/chain/Country.mmdb?ckey=8hY08nReECvarf4iCbIHXFlx80mL43thUQmjf6KnKh512UdFMDeEn+H5I+kJOnl/">Country.mmdb</a></p><h2 id="三、运行Clash"><a href="#三、运行Clash" class="headerlink" title="三、运行Clash"></a>三、运行Clash</h2><p>在clash的目录下的终端输入以下命令</p><pre class="line-numbers language-none"><code class="language-none">chmod +x clash文件<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><pre class="line-numbers language-none"><code class="language-none">.&#x2F;clash -d .<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="四、配置网络"><a href="#四、配置网络" class="headerlink" title="四、配置网络"></a>四、配置网络</h2><p>在设置——网络——手动里面修改网络配置如下图<br><img src="https://img-blog.csdnimg.cn/20210515011352304.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Clash </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> Clash </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hexo:基于Hexo框架搭建Github主页</title>
       <link href="2021/05/04/hexo-ji-yu-hexo-kuang-jia-da-jian-github-zhu-ye/"/>
       <url>2021/05/04/hexo-ji-yu-hexo-kuang-jia-da-jian-github-zhu-ye/</url>
@@ -45,9 +72,9 @@
       
         <tags>
             
-            <tag> NVIDIA </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> NVIDIA </tag>
             
         </tags>
       
@@ -423,9 +450,9 @@
       
         <tags>
             
-            <tag> Ubuntu </tag>
-            
             <tag> Clash </tag>
+            
+            <tag> Ubuntu </tag>
             
         </tags>
       
