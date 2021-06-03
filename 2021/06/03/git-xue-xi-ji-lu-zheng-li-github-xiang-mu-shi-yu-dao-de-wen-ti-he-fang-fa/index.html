@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="SLAM学习：使用move_base无法动态实现实时避障, Yuri">
+    <meta name="keywords" content="Git学习：记录整理Github项目时遇到的问题和方法, Yuri">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>SLAM学习：使用move_base无法动态实现实时避障 | Yuri</title>
+    <title>Git学习：记录整理Github项目时遇到的问题和方法 | Yuri</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -332,12 +332,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/14.JPG')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/21.JPG')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">SLAM学习：使用move_base无法动态实现实时避障</h1>
+                    <h1 class="description center-align post-title">Git学习：记录整理Github项目时遇到的问题和方法</h1>
                 </div>
             </div>
         </div>
@@ -453,8 +453,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/SLAM/">
-                                <span class="chip bg-color">SLAM</span>
+                            <a href="/tags/Git/">
+                                <span class="chip bg-color">Git</span>
                             </a>
                         
                     </div>
@@ -465,8 +465,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/SLAM/" class="post-category">
-                                SLAM
+                            <a href="/categories/Git/" class="post-category">
+                                Git
                             </a>
                         
                     </div>
@@ -478,21 +478,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-01
+                    2021-06-03
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-05-01
+                    2021-06-03
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    537
+                    555
                 </div>
                 
 
@@ -522,9 +522,25 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>首先我使用的机器人模型是自己用solidworks制作然后转出为urdf模型的，然后在我用AMCL+Move_base算法的时候发现机器人无法躲避实时障碍物，也就是当你突然放一个物体在机器人面前，激光雷达是可以扫描到前方有物体而且会在rviz中的显示红色的点云信息但是却没有膨胀区域（也就是Move_base功能包中所设定的一个安全+可能危险+危险区域蓝色的一块）</p>
-<p><strong>一、问题描述</strong><br>首先呈上问题的图片<br><img src="https://img-blog.csdnimg.cn/20200521102247545.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br>可以看到上面的情况，在小车的面前有个正方体，但是却无法描述它的膨胀区域，最刚开始的时候我一直以为是我的move_base功能包出现了问题然后我就重新的去安装一遍功能包然后发现还是没有用，但是很奇怪的是当我用别人的一个小车模型但是同样的move_base包的时候却意外的发现是可以出现膨胀区域，那这下子问题就是我的小车模型上了。</p>
-<p><strong>二、问题解决</strong><br>在我努力排除可能问题的努力下，终于发现问题所在，那就是我的激光雷达所设置的一个水平高度比较高，然后又因为move_base的配置文件costmap_common_params.yaml里面有一个设置障碍物最小和最大高度的选项；很巧的是两个错开了，就是雷达所在高度扫描过去是可以扫描到但是我move_base配置文件里面设置的识别到的障碍物高度如果在那个范围就直接过滤掉，所以最终原因就是costmap_common_params.yaml中的max_obstacle_height和min_obstacle_height参数设置问题，一般的min_obstacle_height设置为地面高度也就是0,max_obstacle_height设置成高于机器人的高度（我就是设置太低了引发的问题），至此就可以解决问题。<br>这是修改之后的图片<br><img src="https://img-blog.csdnimg.cn/20200521104914602.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70"><br><strong>三、总结</strong><br>这里要推荐给大家的参考网站<br><a target="_blank" rel="noopener" href="http://wiki.ros.org/move_base/">ROS_wiki</a><br><a target="_blank" rel="noopener" href="https://wiki.ros.org/costmap_2d">Costmap_2d</a><br><a target="_blank" rel="noopener" href="https://www.ncnynl.com/archives/201708/1920.html">obstacle层参数配置</a></p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>好久没有维护自己的Github了，本文记录了这些天整理个人Github仓库时候遇到的问题和学到的新东西。</p>
+<h2 id="一、Github的Branch问题"><a href="#一、Github的Branch问题" class="headerlink" title="一、Github的Branch问题"></a>一、Github的Branch问题</h2><p>github的Branch以前一直我记得都是以master作为default，不过不知道什么时候变成了main作为default，不过没什么太大影响，去查资料后发现master用作default还和一些历史因素相关，这里不再细讲，所以在push项目上去的时候要看好push到的是master还是main分支中去，个人比较喜欢default不是很喜欢改变。</p>
+<h2 id="二、Github上传项目失败"><a href="#二、Github上传项目失败" class="headerlink" title="二、Github上传项目失败"></a>二、Github上传项目失败</h2><p>正常的通过Git上传项目的流程应该是这样</p>
+<pre class="line-numbers language-none"><code class="language-none">git init
+git add .
+git commit -m &quot;介绍&quot;
+git branch -M main 或者 git branch -M master
+git remote add origin GitHub项目地址
+git push -u origin main 或者 git push -u origin master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>不过后来我发现这样子上传项目的时候，第一在Github上创建一个空项目就行不要添加README，第二在本低要上传文件的根目录下写好README文件然后按上面的流程就行。<br>本人在创建仓库的时候随手也创建了README然后再按照上面步骤上传项目出现如下情况</p>
+<pre class="line-numbers language-none"><code class="language-none">error: failed to push some refs to ‘http:&#x2F;&#x2F;xxx&#x2F;xxx.git’
+hint: Updates were rejected because a pushed branch tip is behind its remote
+hint: counterpart. Check out this branch and integrate the remote changes
+hint: (e.g. ‘git pull …’) before pushing again.
+hint: See the ‘Note about fast-forwards’ in ‘git push --help’ for details.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样的原因是因为在GIthub仓库里面已经存在了README文件但是本地段却没有，所以这里建议在一开始创建项目的时候不要创建README</p>
+<h2 id="三、生成目录树结构"><a href="#三、生成目录树结构" class="headerlink" title="三、生成目录树结构"></a>三、生成目录树结构</h2><p>在Windows10下通过命令生成树形目录结构<br><strong>①下载tree插件</strong><br>在<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/gnuwin32/files/tree/1.5.2.2/">tree插件</a>里面找到tree-1.5.2.2-bin.zip文件点击下载然后解压后将里面bin文件夹的tree.exe文件复制到你的Git的目录的/usr/bin/目录下即可<br><img src="https://img-blog.csdnimg.cn/20210519181045537.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>②在本低项目的目录下生成目录树</strong><br>使用下列指令生成</p>
+<pre class="line-numbers language-none"><code class="language-none">tree -I node_modules &gt; tree.text<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>然后复制目录树文件下的内容到README文件中进行撰写即可</p>
 
                 
             </div>
@@ -551,7 +567,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://FanDady.github.io/2021/05/01/slam-xue-xi-shi-yong-move-base-wu-fa-dong-tai-shi-xian-shi-shi-bi-zhang/">http://FanDady.github.io/2021/05/01/slam-xue-xi-shi-yong-move-base-wu-fa-dong-tai-shi-xian-shi-shi-bi-zhang/</a>
+                    <a href="http://FanDady.github.io/2021/06/03/git-xue-xi-ji-lu-zheng-li-github-xiang-mu-shi-yu-dao-de-wen-ti-he-fang-fa/">http://FanDady.github.io/2021/06/03/git-xue-xi-ji-lu-zheng-li-github-xiang-mu-shi-yu-dao-de-wen-ti-he-fang-fa/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -589,8 +605,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/SLAM/">
-                                    <span class="chip bg-color">SLAM</span>
+                                <a href="/tags/Git/">
+                                    <span class="chip bg-color">Git</span>
                                 </a>
                             
                         </div>
@@ -1028,53 +1044,47 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/05/01/slam-xue-xi-solidworks2018-dao-chu-xiao-che-urdf-mo-xing-xia-yu-dao-de-wen-ti/">
+                <a href="/2021/06/03/git-xue-xi-ji-lu-zheng-li-github-xiang-mu-shi-yu-dao-de-wen-ti-he-fang-fa/">
                     <div class="card-image">
                         
-                        <img src="/images/15.JPG" class="responsive-img" alt="SLAM学习：Solidworks2018导出小车URDF模型下遇到的问题">
+                        <img src="/images/21.JPG" class="responsive-img" alt="Git学习：记录整理Github项目时遇到的问题和方法">
                         
-                        <span class="card-title">SLAM学习：Solidworks2018导出小车URDF模型下遇到的问题</span>
+                        <span class="card-title">Git学习：记录整理Github项目时遇到的问题和方法</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Solidworks2018导出小车URDF模型后在ROS上显示时小车模型混乱
+                            记录整理Github项目时遇到的问题和方法
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-01
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-03
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/SLAM/" class="post-category">
-                                    SLAM
+                            <a href="/categories/Git/" class="post-category">
+                                    Git
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/SLAM/">
-                        <span class="chip bg-color">SLAM</span>
-                    </a>
-                    
-                    <a href="/tags/URDF/">
-                        <span class="chip bg-color">URDF</span>
-                    </a>
-                    
-                    <a href="/tags/Solidworks/">
-                        <span class="chip bg-color">Solidworks</span>
+                    <a href="/tags/Git/">
+                        <span class="chip bg-color">Git</span>
                     </a>
                     
                 </div>
@@ -1088,30 +1098,30 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/01/slam-xue-xi-gmapping-jian-tu-xia-di-tu-bian-xing-geng-xin-su-du-man-wen-ti/">
+                <a href="/2021/05/15/linux-xia-clash-pei-zhi-jiao-cheng/">
                     <div class="card-image">
                         
-                        <img src="/images/13.JPG" class="responsive-img" alt="SLAM学习：Gmapping建图下地图变形更新速度慢问题">
+                        <img src="/images/25.JPG" class="responsive-img" alt="Linux下Clash配置教程">
                         
-                        <span class="card-title">SLAM学习：Gmapping建图下地图变形更新速度慢问题</span>
+                        <span class="card-title">Linux下Clash配置教程</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            在ROS上仿真实现Gmapping建图算法时遇到激光雷达扫描建图成像慢的问题
+                            Clash在Linux下的配置教程
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-01
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-15
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%BB%BA%E5%9B%BE%E7%AE%97%E6%B3%95/" class="post-category">
-                                    建图算法
+                            <a href="/categories/Clash/" class="post-category">
+                                    Clash
                                 </a>
                             
                             
@@ -1121,12 +1131,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/SLAM/">
-                        <span class="chip bg-color">SLAM</span>
+                    <a href="/tags/Linux/">
+                        <span class="chip bg-color">Linux</span>
                     </a>
                     
-                    <a href="/tags/%E5%BB%BA%E5%9B%BE%E7%AE%97%E6%B3%95/">
-                        <span class="chip bg-color">建图算法</span>
+                    <a href="/tags/Clash/">
+                        <span class="chip bg-color">Clash</span>
                     </a>
                     
                 </div>

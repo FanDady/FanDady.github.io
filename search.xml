@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Git学习：记录整理Github项目时遇到的问题和方法</title>
+      <link href="2021/06/03/git-xue-xi-ji-lu-zheng-li-github-xiang-mu-shi-yu-dao-de-wen-ti-he-fang-fa/"/>
+      <url>2021/06/03/git-xue-xi-ji-lu-zheng-li-github-xiang-mu-shi-yu-dao-de-wen-ti-he-fang-fa/</url>
+      
+        <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>好久没有维护自己的Github了，本文记录了这些天整理个人Github仓库时候遇到的问题和学到的新东西。</p><h2 id="一、Github的Branch问题"><a href="#一、Github的Branch问题" class="headerlink" title="一、Github的Branch问题"></a>一、Github的Branch问题</h2><p>github的Branch以前一直我记得都是以master作为default，不过不知道什么时候变成了main作为default，不过没什么太大影响，去查资料后发现master用作default还和一些历史因素相关，这里不再细讲，所以在push项目上去的时候要看好push到的是master还是main分支中去，个人比较喜欢default不是很喜欢改变。</p><h2 id="二、Github上传项目失败"><a href="#二、Github上传项目失败" class="headerlink" title="二、Github上传项目失败"></a>二、Github上传项目失败</h2><p>正常的通过Git上传项目的流程应该是这样</p><pre class="line-numbers language-none"><code class="language-none">git initgit add .git commit -m &quot;介绍&quot;git branch -M main 或者 git branch -M mastergit remote add origin GitHub项目地址git push -u origin main 或者 git push -u origin master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>不过后来我发现这样子上传项目的时候，第一在Github上创建一个空项目就行不要添加README，第二在本低要上传文件的根目录下写好README文件然后按上面的流程就行。<br>本人在创建仓库的时候随手也创建了README然后再按照上面步骤上传项目出现如下情况</p><pre class="line-numbers language-none"><code class="language-none">error: failed to push some refs to ‘http:&#x2F;&#x2F;xxx&#x2F;xxx.git’hint: Updates were rejected because a pushed branch tip is behind its remotehint: counterpart. Check out this branch and integrate the remote changeshint: (e.g. ‘git pull …’) before pushing again.hint: See the ‘Note about fast-forwards’ in ‘git push --help’ for details.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>这样的原因是因为在GIthub仓库里面已经存在了README文件但是本地段却没有，所以这里建议在一开始创建项目的时候不要创建README</p><h2 id="三、生成目录树结构"><a href="#三、生成目录树结构" class="headerlink" title="三、生成目录树结构"></a>三、生成目录树结构</h2><p>在Windows10下通过命令生成树形目录结构<br><strong>①下载tree插件</strong><br>在<a href="https://sourceforge.net/projects/gnuwin32/files/tree/1.5.2.2/">tree插件</a>里面找到tree-1.5.2.2-bin.zip文件点击下载然后解压后将里面bin文件夹的tree.exe文件复制到你的Git的目录的/usr/bin/目录下即可<br><img src="https://img-blog.csdnimg.cn/20210519181045537.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNzExNjk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>②在本低项目的目录下生成目录树</strong><br>使用下列指令生成</p><pre class="line-numbers language-none"><code class="language-none">tree -I node_modules &gt; tree.text<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>然后复制目录树文件下的内容到README文件中进行撰写即可</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Git </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Git </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Linux下Clash配置教程</title>
       <link href="2021/05/15/linux-xia-clash-pei-zhi-jiao-cheng/"/>
       <url>2021/05/15/linux-xia-clash-pei-zhi-jiao-cheng/</url>
