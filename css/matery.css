@@ -2171,8 +2171,11 @@ footer .copy-right {
 .fa-lightbulb-o:before { 
     content: "\f186"; 
 }
+
+
 /* 深色模式设置 */ 
 /* 字体颜色变灰白色 */ 
+/*
 body.dark .fas, 
 body.dark .title, 
 body.dark .row .text, 
@@ -2205,13 +2208,17 @@ body.dark a
 { 
     color: rgba(255, 255, 255, 0.6); 
 } 
+*/
 /* 背景颜色变灰色 */ 
+/*
 body.dark .card, 
 body.dark .block-with-text:after 
 { 
     background-color: #282c34; 
 }
+*/
 /* 背景颜色变黑色 */ 
+/*
 body.dark, 
 body.dark .v[data-class=v] .vcount, 
 body.dark #rewardModal .modal-content, 
@@ -2221,7 +2228,9 @@ body.dark header .side-nav .menu-list .m-nav-show
 { 
     background-color: #12121c; 
 } 
+*/
 /* 改变透明度 */ 
+/*
 body.dark .aplayer
 {
     background: #2f3742!important;
@@ -2231,5 +2240,5 @@ body.dark strong
 { 
     filter: brightness(.7); 
 }
-
+*/
 
