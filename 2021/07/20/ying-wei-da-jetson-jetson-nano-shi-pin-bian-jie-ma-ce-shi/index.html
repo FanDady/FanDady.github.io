@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hexo:基于Hexo框架搭建Github主页, Yuri">
+    <meta name="keywords" content="英伟达Jetson：Jetson Nano视频编解码测试, Yuri">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hexo:基于Hexo框架搭建Github主页 | Yuri</title>
+    <title>英伟达Jetson：Jetson Nano视频编解码测试 | Yuri</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -332,12 +332,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/24.JPG')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/10.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hexo:基于Hexo框架搭建Github主页</h1>
+                    <h1 class="description center-align post-title">英伟达Jetson：Jetson Nano视频编解码测试</h1>
                 </div>
             </div>
         </div>
@@ -453,8 +453,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Hexo/">
-                                <span class="chip bg-color">Hexo</span>
+                            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                <span class="chip bg-color">深度学习</span>
+                            </a>
+                        
+                            <a href="/tags/%E8%BE%B9%E7%BC%98AI/">
+                                <span class="chip bg-color">边缘AI</span>
+                            </a>
+                        
+                            <a href="/tags/Jetson/">
+                                <span class="chip bg-color">Jetson</span>
                             </a>
                         
                     </div>
@@ -465,8 +473,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Hexo/" class="post-category">
-                                Hexo
+                            <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-category">
+                                深度学习
                             </a>
                         
                     </div>
@@ -478,21 +486,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-04
+                    2021-07-20
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-05-04
+                    2021-07-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    876
+                    1.4k
                 </div>
                 
 
@@ -522,49 +530,77 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文主要是在GitHub’s Page的基础上使用Hexo开源框架对Page进行优化，并且使用自定义域名来访问GitHub’s Page，所以此个人主页的搭建是在自己的Github账号上，服务器自然也是在Github那边，只不过我们要做的就是对原来的Github’s Page进行优化而已。</p>
-<h2 id="一、安装Git"><a href="#一、安装Git" class="headerlink" title="一、安装Git"></a>一、安装Git</h2><p>自行在<a target="_blank" rel="noopener" href="https://git-scm.com/">Git官网</a>下载相对应版本的Git</p>
-<h2 id="二、安装Node-js"><a href="#二、安装Node-js" class="headerlink" title="二、安装Node.js"></a>二、安装Node.js</h2><p><strong>①下载安装</strong><br>Hexo开源项目是基于Node.js，所以，首先需要电脑上安装Node.js和配置系统路径。<br><a target="_blank" rel="noopener" href="https://nodejs.org/en/">Node.js下载地址</a><br>关于Node.js的路径配置可能会有点小坑，可能同学们在网上找的Node.js的配置教程都是比较早的，所以很可能已经过时，笔者在后续安装中出现的问题归根结底主要由于Node.js的系统路径配置，这里给出我参考的认为能较好解决配置问题的一篇博文。<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40593308/article/details/110559838?spm=1001.2014.3001.5506">Node.js的安装与配置</a><br><strong>②验证安装的成功性</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">node -v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<pre class="line-numbers language-none"><code class="language-none">npm -v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>若各出现版本号即表示安装成功</p>
-<h2 id="三、安装npm的国内镜像cnpm"><a href="#三、安装npm的国内镜像cnpm" class="headerlink" title="三、安装npm的国内镜像cnpm"></a>三、安装npm的国内镜像cnpm</h2><p>由于npm命令较为常用并用来下载Hexo所需的一些插件但是国内直接使用npmmingling下载速度较慢，所以这里提供国内淘宝云镜像，下次要用npm命令的时候就可以用cnpm代替。</p>
-<p><strong>①下载cnpm淘宝云镜像</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">npm config set registry https:&#x2F;&#x2F;registry.npm.taobao.org<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><strong>②验证cnpm安装的成功性</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">npm config get registry<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>若返回<a target="_blank" rel="noopener" href="https://registry.npm.taobao.org则表示安装成功/">https://registry.npm.taobao.org则表示安装成功</a></p>
-<h2 id="四、安装Hexo框架"><a href="#四、安装Hexo框架" class="headerlink" title="四、安装Hexo框架"></a>四、安装Hexo框架</h2><p><strong>①使用cnpm下载Hexo</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">cnpm install -g hexo-cli<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><strong>②验证Hexo框架安装成功性</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="五、初始化个人主页项目"><a href="#五、初始化个人主页项目" class="headerlink" title="五、初始化个人主页项目"></a><strong>五、初始化个人主页项目</strong></h2><p><strong>①在本地电脑端找个位置新建一个文件夹用来存放项目文件</strong><br><strong>②进入新建的文件夹然后右键点击<code>git bash here</code></strong><br><strong>③输入以下命令来初始化</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 初始化项目
-hexo init<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 运行主页，可以提前在http:&#x2F;&#x2F;localhost:4000上预览主页效果
-hexo s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="六、Github创建个人主页项目"><a href="#六、Github创建个人主页项目" class="headerlink" title="六、Github创建个人主页项目"></a>六、Github创建个人主页项目</h2><p><strong>①点击新建一个repositories，切记项目命名为自己的username.github.io</strong><br><strong>②在上面新建的文件夹的目录下面点击<code>git bash here</code>进入命令行</strong><br><strong>③安装部署工具</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">cnpm install --save hexo-deployer-git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><strong>④修改blog下面的config.yml文件</strong></p>
-<p>找到config.yml最下面的deploy部分，改为如下代码，注意修改自己的username使此项目对应到自己的GitHub项目上去</p>
-<pre class="line-numbers language-none"><code class="language-none">deploy:
-  type: git
-  repo: https:&#x2F;&#x2F;github.com&#x2F;username&#x2F;username.github.io.git
-  branch: master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>⑤部署上传Github</strong></p>
-<p>修改优化自己的主页后通过以下命令来控制GitHub’s Page的生成和修改</p>
-<pre class="line-numbers language-none"><code class="language-none">hexo clean<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<pre class="line-numbers language-none"><code class="language-none">hexo g<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<pre class="line-numbers language-none"><code class="language-none">hexo d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="七、自定义域名绑定"><a href="#七、自定义域名绑定" class="headerlink" title="七、自定义域名绑定"></a>七、自定义域名绑定</h2><p><strong>①在阿里云（其他平台也可以）上购买域名</strong><br><strong>②买完域名后需要解析到自己的Github项目中</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">ping username.github.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>得到项目的IP地址后，进入阿里云解析自己的域名到一个IPV4地址，解析记录设置两个分别用www和@开头作为解析前缀，TTL生效时间设置为10</p>
-<p><strong>③新增CNAME文件</strong></p>
-<p>在原来创建的文件夹即/hexo/source/创建一个CNAME文件（无后缀名文件），在文件里面写下在阿里云购买的域名。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>[1] <a target="_blank" rel="noopener" href="http://weimumu.top/2020/ckjco6flf00022gnl4c163vst/">Hexo+Github从0搭建个人博客</a><br>[2] <a target="_blank" rel="noopener" href="https://rika0-0.github.io/2020/04/08/%E6%9C%80%E5%BF%AB%E9%80%9F%E5%9C%B0%E6%90%AD%E5%BB%BA%E7%82%AB%E4%B8%BD%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99or%E5%8D%9A%E5%AE%A2/">最快速搭建个人博客</a><br>[3] <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">Hexo官网</a></p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文主要测试Jetson Nano的编解码的能力是否符合官方文档所展示，本文主要基于1080P和4K的两类分辨率视频进行H.264和H.265的编解码测试，测试内容主要有：1080P，4K视频的直接解码测试；从1080P的USB摄像头和4K的CSI摄像头获取图像进行编码再进行解码显示。</p>
+<h2 id="一、安装-GStreamer"><a href="#一、安装-GStreamer" class="headerlink" title="一、安装 GStreamer"></a>一、安装 GStreamer</h2><ul>
+<li>首先使用以下命令来安装Gstreamer1.0<pre class="line-numbers language-none"><code class="language-none">sudo add-apt-repository universe
+sudo add-apt-repository multiverse
+sudo apt-get update
+sudo apt-get install gstreamer1.0-tools gstreamer1.0-alsa \
+  gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+  gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
+  gstreamer1.0-libav
+sudo apt-get install libgstreamer1.0-dev \
+  libgstreamer-plugins-base1.0-dev \
+  libgstreamer-plugins-good1.0-dev \
+  libgstreamer-plugins-bad1.0-dev<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>查看Gstreamer版本<pre class="line-numbers language-none"><code class="language-none">gst-inspect-1.0 --version<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+<h2 id="二、Gstreamer介绍"><a href="#二、Gstreamer介绍" class="headerlink" title="二、Gstreamer介绍"></a>二、Gstreamer介绍</h2><ul>
+<li>Gstreamer1.0包含 gst-omx解码插件如下所示：<br><img src="https://img-blog.csdnimg.cn/img_convert/8cd7aa4b688340d096f6172437a3e649.png"></li>
+<li>GStreamer 1.0 包括以下 gst-v4l2 视频解码器：<br><img src="https://img-blog.csdnimg.cn/img_convert/ea1cd3e38dc9e653b920e7b26f850903.png"></li>
+<li>GStreamer 1.0 包括以下 gst-omx 视频编码器：<br><img src="https://img-blog.csdnimg.cn/img_convert/d66e34505e39277d0450f2145abeed81.png"></li>
+<li>GStreamer 1.0 包括以下 gst-v4l2 视频编码器：<br><img src="https://img-blog.csdnimg.cn/img_convert/2d5fad6e22f577384b69c654f661e798.png"></li>
+<li>Gstreamer1.0包括以下几种视频接收器<br><img src="https://img-blog.csdnimg.cn/img_convert/81325a5aaca8189a85a79c2c49093c07.png"></li>
+</ul>
+<h2 id="三、安装v4l-utils"><a href="#三、安装v4l-utils" class="headerlink" title="三、安装v4l-utils"></a>三、安装v4l-utils</h2><ul>
+<li>终端输入以下命令来安装<pre class="line-numbers language-none"><code class="language-none">sudo apt-get install v4l-utils<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>利用V4-utils查询当前的USB设备<pre class="line-numbers language-none"><code class="language-none">v4l2-ctl --list-devices<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>打开USB摄像头并显示出来<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 v4l2src ! xvimagesink<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+<h2 id="四、USB摄像头的编解码测试"><a href="#四、USB摄像头的编解码测试" class="headerlink" title="四、USB摄像头的编解码测试"></a>四、USB摄像头的编解码测试</h2><blockquote>
+<p>备注：本人的摄像头最高只支持1920x1080，30FPS，这里根据自己个人摄像头情况来修改下面的命令，如果不知道可以通过<code>v4l2-ctl -d /dev/video0 --list-format-ext</code>来查询自己的USB设备支持格式</p>
+</blockquote>
+<ul>
+<li>使用gst-omx 进行H264硬件编码（打开摄像头进行视频录制，按下Ctrl+C即可退出保存视频文件）<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 v4l2src device&#x3D;&quot;&#x2F;dev&#x2F;video0&quot; ! &quot;video&#x2F;x-raw, width&#x3D;1920, height&#x3D;1080, format&#x3D;(string)YUY2&quot; ! nvvidconv ! &#39;video&#x2F;x-raw(memory:NVMM), format&#x3D;(string)I420&#39; ! omxh264enc ! &#39;video&#x2F;x-h264, stream-format&#x3D;(string)byte-stream&#39; ! h264parse ! qtmux ! filesink location&#x3D;1080P.mp4 -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>使用gst-omx 进行H265硬件编码（打开摄像头进行视频录制，按下Ctrl+C即可退出保存视频文件）<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 v4l2src device&#x3D;&quot;&#x2F;dev&#x2F;video0&quot; ! &quot;video&#x2F;x-raw, width&#x3D;1920, height&#x3D;1080, format&#x3D;(string)YUY2&quot; ! nvvidconv ! &#39;video&#x2F;x-raw(memory:NVMM), format&#x3D;(string)I420&#39; ! omxh265enc ! &#39;video&#x2F;x-h265, stream-format&#x3D;(string)byte-stream&#39; ! h264parse ! qtmux ! filesink location&#x3D;1080P.mp4 -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<blockquote>
+<p>备注：如果下面解码后显示的界面太大可以将下面<code>nvoverlaysink</code>改成<code>nv3dsink</code>这样显示就变成窗口化</p>
+</blockquote>
+</li>
+<li>使用gst-omx进行H264硬件解码（对上面保存的视频文件进行解码）<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 filesrc location&#x3D;1080p.mp4 ! \ qtdemux name&#x3D;demux demux.video_0 ! queue ! h264parse ! omxh264dec ! \ nvoverlaysink -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>使用gst-omx进行H265硬件解码（对上面保存的视频文件进行解码）<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 filesrc location&#x3D;1080p.mp4 ! \ qtdemux name&#x3D;demux demux.video_0 ! queue ! h265parse ! omxh265dec ! \ nvoverlaysink -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<blockquote>
+<p>备注：下面只展示了gst-v4l2的H264编解码，这里不再重复H265，因为与上面的gst-omx编解码方式相同只不过把对应的编解码参数改变而已</p>
+</blockquote>
+</li>
+<li>使用gst-v4l2进行H264硬件编码<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 v4l2src device&#x3D;&quot;&#x2F;dev&#x2F;video0&quot; ! &quot;video&#x2F;x-raw, width&#x3D;1920, height&#x3D;1080, format&#x3D;(string)YUY2&quot; ! nvvidconv ! &#39;video&#x2F;x-raw(memory:NVMM), format&#x3D;(string)I420&#39; ! nvv4l2h264enc ! &#39;video&#x2F;x-h264, stream-format&#x3D;(string)byte-stream&#39; ! h264parse ! qtmux ! filesink location&#x3D;1080P.mp4 -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>使用gst-v4l2进行H264硬件解码<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 filesrc location&#x3D;1080p.mp4 ! \ qtdemux name&#x3D;demux demux.video_0 ! queue ! h264parse ! nvv4l2decoder enable-max-performance&#x3D;1 ! \ nvoverlaysink -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<blockquote>
+<p>备注：以下展示H264和omx，H265以及v4l2自行类比</p>
+</blockquote>
+</li>
+<li>网络流式传输RTSP，这里展示在同个设备下进行网络传输<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 v4l2src ! decodebin ! videoconvert ! omxh264enc ! video&#x2F;x-h264, stream-format&#x3D;byte-stream ! rtph264pay ! udpsink host&#x3D;127.0.0.1 port&#x3D;5000<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>再打开一个新的终端<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 udpsrc port&#x3D;5000 ! application&#x2F;x-rtp, encoding-name&#x3D;H264, payload&#x3D;96 ! rtph264depay ! h264parse ! omxh264dec ! nvoverlaysink<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+<h2 id="五、本地视频文件解码测试"><a href="#五、本地视频文件解码测试" class="headerlink" title="五、本地视频文件解码测试"></a>五、本地视频文件解码测试</h2><blockquote>
+<p>备注：这里视频文件请自行查找获得，本文共测试了1080P，4K，6K，8K的视频素材文件，并且以下的解码方式为gst-omx进行，gst-v4l2不再重复;其中filename文件根据自己的文件名来填入；另外由于网络上大部分视频文件都是以H264编码因此这里也只展示了H264的解码</p>
+</blockquote>
+<ul>
+<li>对本地视频文件进行gst-omx的H264解码<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 filesrc location&#x3D;&lt;filename.mp4&gt; ! \ qtdemux name&#x3D;demux demux.video_0 ! queue ! h264parse ! omxh264dec ! \ nveglglessink -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="六、CSI摄像头的编解码测试"><a href="#六、CSI摄像头的编解码测试" class="headerlink" title="六、CSI摄像头的编解码测试"></a>六、CSI摄像头的编解码测试</h2><blockquote>
+<p>备注：这里使用的是Jetson-IMX477-RPIV3摄像头</p>
+</blockquote>
+</li>
+<li>进行4K的视频编码保存<pre class="line-numbers language-none"><code class="language-none">SENSOR_ID&#x3D;0 # 0 for CAM0 and 1 for CAM1 ports
+FRAMERATE&#x3D;30 # Framerate can go from 2 to 30 for 4032x3040 mode
+gst-launch-1.0 -e nvarguscamerasrc sensor-id&#x3D;$SENSOR_ID ! &quot;video&#x2F;x-raw(memory:NVMM),width&#x3D;4096,height&#x3D;2160,framerate&#x3D;$FRAMERATE&#x2F;1&quot; ! nvv4l2h264enc ! h264parse ! mp4mux ! filesink location&#x3D;4K.mp4<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li>进行4K视频的解码显示<pre class="line-numbers language-none"><code class="language-none">gst-launch-1.0 filesrc location&#x3D;4K.mp4 ! \ qtdemux name&#x3D;demux demux.video_0 ! queue ! h264parse ! nvv4l2decoder enable-max-performance&#x3D;1 ! \ nv3dsink -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="七、总结"><a href="#七、总结" class="headerlink" title="七、总结"></a>七、总结</h2><blockquote>
+<p>总的来说，Jetson Nano对于4K视频可以不管在H.264还是H.265下做到很好地编解码，对于4K以上视频进行测试后发现将会超出Nano能力范围无法运行，对于1080P的图像最多可以4路进行编解码，总结来说就是Jetson nano 的编解码能力在4K视频流范围内</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="八、参考"><a href="#八、参考" class="headerlink" title="八、参考"></a>八、参考</h2><p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/zong596568821xp/article/details/114585504">Linux之gstreamer视频编解码测试指令</a><br>[2] <a target="_blank" rel="noopener" href="https://blog.csdn.net/chongzi865458/article/details/102865374">Jetson DeepStream GStreamer使用记录</a><br>[3] <a target="_blank" rel="noopener" href="https://docs.nvidia.com/jetson/l4t/index.html#page/Tegra%20Linux%20Driver%20Package%20Development%20Guide/accelerated_gstreamer.html#wwpID0E0N20HA">英伟达开发指南</a><br>[4] <a target="_blank" rel="noopener" href="https://www.hackster.io/SaadTiwana/embedded-diaries-jetson-gstreamer-video-encoding-decoding-585ba7">嵌入式笔记</a></p>
 
                 
             </div>
@@ -591,7 +627,7 @@ hexo s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://FanDady.github.io/2021/05/04/hexo-ji-yu-hexo-kuang-jia-da-jian-github-zhu-ye/">http://FanDady.github.io/2021/05/04/hexo-ji-yu-hexo-kuang-jia-da-jian-github-zhu-ye/</a>
+                    <a href="http://FanDady.github.io/2021/07/20/ying-wei-da-jetson-jetson-nano-shi-pin-bian-jie-ma-ce-shi/">http://FanDady.github.io/2021/07/20/ying-wei-da-jetson-jetson-nano-shi-pin-bian-jie-ma-ce-shi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -629,8 +665,16 @@ hexo s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Hexo/">
-                                    <span class="chip bg-color">Hexo</span>
+                                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                    <span class="chip bg-color">深度学习</span>
+                                </a>
+                            
+                                <a href="/tags/%E8%BE%B9%E7%BC%98AI/">
+                                    <span class="chip bg-color">边缘AI</span>
+                                </a>
+                            
+                                <a href="/tags/Jetson/">
+                                    <span class="chip bg-color">Jetson</span>
                                 </a>
                             
                         </div>
@@ -1068,49 +1112,55 @@ hexo s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/05/15/linux-xia-clash-pei-zhi-jiao-cheng/">
+                <a href="/2021/07/20/ying-wei-da-jetson-jetson-nano-shi-pin-bian-jie-ma-ce-shi/">
                     <div class="card-image">
                         
-                        <img src="/images/25.JPG" class="responsive-img" alt="Linux下Clash配置教程">
+                        <img src="/images/10.jpg" class="responsive-img" alt="英伟达Jetson：Jetson Nano视频编解码测试">
                         
-                        <span class="card-title">Linux下Clash配置教程</span>
+                        <span class="card-title">英伟达Jetson：Jetson Nano视频编解码测试</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Clash在Linux下的配置教程
+                            英伟达Jetson：Jetson Nano视频编解码测试
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-15
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-20
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Clash/" class="post-category">
-                                    Clash
+                            <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-category">
+                                    深度学习
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Linux/">
-                        <span class="chip bg-color">Linux</span>
+                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">深度学习</span>
                     </a>
                     
-                    <a href="/tags/Clash/">
-                        <span class="chip bg-color">Clash</span>
+                    <a href="/tags/%E8%BE%B9%E7%BC%98AI/">
+                        <span class="chip bg-color">边缘AI</span>
+                    </a>
+                    
+                    <a href="/tags/Jetson/">
+                        <span class="chip bg-color">Jetson</span>
                     </a>
                     
                 </div>
@@ -1124,30 +1174,30 @@ hexo s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/01/tx2-shua-ji-jetpack4-2-jiao-cheng/">
+                <a href="/2021/07/06/shen-du-xue-xi-sheng-cheng-shi-mo-xing-xue-xi-bi-ji/">
                     <div class="card-image">
                         
-                        <img src="/images/23.JPG" class="responsive-img" alt="TX2刷机Jetpack4.2教程">
+                        <img src="/images/19.JPG" class="responsive-img" alt="深度学习：生成式模型学习笔记">
                         
-                        <span class="card-title">TX2刷机Jetpack4.2教程</span>
+                        <span class="card-title">深度学习：生成式模型学习笔记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            NVIDIA的TX2板子进行刷机
+                            深度学习生成式模型学习笔记
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-01
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-06
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/NVIDIA/" class="post-category">
-                                    NVIDIA
+                            <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-category">
+                                    深度学习
                                 </a>
                             
                             
@@ -1157,12 +1207,8 @@ hexo s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Linux/">
-                        <span class="chip bg-color">Linux</span>
-                    </a>
-                    
-                    <a href="/tags/NVIDIA/">
-                        <span class="chip bg-color">NVIDIA</span>
+                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">深度学习</span>
                     </a>
                     
                 </div>
