@@ -448,9 +448,9 @@
       
         <tags>
             
-            <tag> SLAM </tag>
-            
             <tag> 建图算法 </tag>
+            
+            <tag> SLAM </tag>
             
         </tags>
       
@@ -475,9 +475,9 @@
       
         <tags>
             
-            <tag> 路径规划算法 </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> 路径规划算法 </tag>
             
         </tags>
       
