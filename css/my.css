@@ -4,6 +4,11 @@
     src: url('../font/myFont.ttf');
 }
 
+/*
 body{
     font-family: 'myFont';
 }
+*/
+.diyFont{
+    font-family: 'MaShanZheng-Regular';
+   }
