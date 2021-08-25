@@ -1,14 +1,9 @@
 /* Here is your custom css styles. */
 @font-face{
-    font-family: 'myFont';
-    src: url('../font/myFont.ttf');
+    font-family: 'new';
+    src: url('../font/new.ttf');
 }
 
-/*
 body{
-    font-family: 'myFont';
+    font-family: 'new';
 }
-*/
-.diyFont{
-    font-family: 'MaShanZheng-Regular';
-   }

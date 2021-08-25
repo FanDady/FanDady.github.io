@@ -2138,107 +2138,176 @@ footer .copy-right {
     padding: 0;
     margin: 0;
 }
-/* 深色模式按钮设置 */ 
-#sma { 
-    background: #000; 
-    width: 50px; 
-    height: 50px; 
-    display: block; 
-    position: fixed; 
-    border-radius: 50%; 
-    right: 15px; 
-    bottom: 150px; 
-    padding-top: 15px; 
-    margin-bottom: 0; 
-    z-index: 998; 
-    cursor: pointer; 
+
+/* 滚动条 */
+::-webkit-scrollbar-thumb {
+    background-color: #5da0f7;
+    background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.4) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.4) 50%,rgba(255,255,255,.4) 75%,transparent 75%,transparent);
+    border-radius: 3em;
 }
-#sma .fa-moon-o { 
-    position: absolute; 
-    right: 13px; 
-    bottom: 13px; 
-    font-size: 1.48rem!important; 
+::-webkit-scrollbar-track {
+    background-color: rgb(226, 232, 243);
+    border-radius: 3em;
 }
-#sma .fa-lightbulb-o { 
-    position: absolute; 
-    right: 13px; 
-    bottom: 13px; 
-    font-size: 1.48rem!important; 
-} 
-.fa-moon-o:before { 
-    content: "\f186"; 
-} 
-.fa-lightbulb-o:before { 
-    content: "\f186"; 
+::-webkit-scrollbar {
+    width: 8px;
+    height: 15px;
 }
 
 
-/* 深色模式设置 */ 
-/* 字体颜色变灰白色 */ 
-/*
-body.dark .fas, 
-body.dark .title, 
-body.dark .row .text, 
-body.dark article .article-content .summary, 
-body.dark .card .card-image .card-title, 
-body.dark .fa-moon-o:before, 
-body.dark .fa-lightbulb-o:before, 
-body.dark article .article-tags .chip, 
-body.dark .chip-container .tag-title, 
-body.dark div.jqcloud a, 
-body.dark .friends-container .tag-title, 
-body.dark .frind-ship .title h1, 
-body.dark .card .card-content p, 
-body.dark .v[data-class=v] .vcount, 
-body.dark .v[data-class=v] .vcount .vnum, 
-body.dark pre code, 
-body.dark h1, 
-body.dark h2, 
-body.dark h3, 
-body.dark h4, 
-body.dark h5, 
-body.dark h6, 
-body.dark li, 
-body.dark p, 
-body.dark header .side-nav .mobile-head .logo-name, 
-body.dark header .side-nav .mobile-head .logo-desc, 
-body.dark header .side-nav .menu-list a, 
-body.dark .bg-cover .post-title, 
-body.dark a
-{ 
-    color: rgba(255, 255, 255, 0.6); 
-} 
-*/
-/* 背景颜色变灰色 */ 
-/*
-body.dark .card, 
-body.dark .block-with-text:after 
-{ 
-    background-color: #282c34; 
-}
-*/
-/* 背景颜色变黑色 */ 
-/*
-body.dark, 
-body.dark .v[data-class=v] .vcount, 
-body.dark #rewardModal .modal-content, 
-body.dark .modal, 
-body.dark header .side-nav, 
-body.dark header .side-nav .menu-list .m-nav-show 
-{ 
-    background-color: #12121c; 
-} 
-*/
-/* 改变透明度 */ 
-/*
-body.dark .aplayer
-{
-    background: #2f3742!important;
-} 
-body.dark img, 
-body.dark strong 
-{ 
-    filter: brightness(.7); 
-}
-*/
 
+/* 深色模式动画 */
+
+.Cuteen_DarkSky,
+.Cuteen_DarkSky:before {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 88888888;
+}
+.Cuteen_DarkSky {
+  background: linear-gradient(#feb8b0, #fef9db);
+}
+.Cuteen_DarkSky:before {
+  transition: 2s ease all;
+  opacity: 0;
+  background: linear-gradient(#4c3f6d, #6c62bb, #93b1ed);
+}
+.DarkMode .Cuteen_DarkSky:before {
+  opacity: 1;
+}
+.Cuteen_DarkPlanet {
+  z-index: 99999999;
+  position: fixed;
+  left: -50%;
+  top: -50%;
+  width: 200%;
+  height: 200%;
+  -webkit-animation: CuteenPlanetMove 2s cubic-bezier(0.7, 0, 0, 1);
+  animation: CuteenPlanetMove 2s cubic-bezier(0.7, 0, 0, 1);
+  transform-origin: center bottom;
+}
+@-webkit-keyframes CuteenPlanetMove {
+  0% {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes CuteenPlanetMove {
+  0% {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.Cuteen_DarkPlanet:after {
+  position: absolute;
+  left: 35%;
+  top: 40%;
+  width: 9.375rem;
+  height: 9.375rem;
+  border-radius: 50%;
+  content: '';
+  background: linear-gradient(#fefefe, #fffbe8);
+}
+/*深色模式按钮*/
+.icon-V {
+    background: #fff;
+    box-shadow: 0 0 4px 1px rgb(0 0 0 / 12%) !important;
+    border-radius: 6px !important;
+    width: 48px;
+    height: 48px;
+    padding: 22px;
+    border-radius: 6px;
+    overflow: hidden;
+    position: fixed;
+    bottom: 125px;/*用于调整按钮位置*/
+    right: 15px;
+    transition: 1.3s cubic-bezier(0.53, 0, 0.15, 1.3);
+    z-index: 9999;
+  }
+.icon-V svg{ 
+    position: absolute;
+    bottom: 0px;
+    margin: auto;
+    right: 1px;
+  }
+
+
+/* 字体颜色变灰白色 */
+body.DarkMode .fas,
+body.DarkMode .title,
+body.DarkMode .row .text,
+body.DarkMode article .article-content .summary,
+body.DarkMode .card .card-image .card-title,
+body.DarkMode .fa-moon-o:before,
+body.DarkMode .fa-lightbulb-o:before,
+body.DarkMode article .article-tags .chip,
+body.DarkMode .chip-container .tag-title,
+body.DarkMode div.jqcloud a,
+body.DarkMode .friends-container .tag-title,
+body.DarkMode .frind-ship .title h1,
+body.DarkMode .card .card-content p,
+body.DarkMode .card .card-content .dss,
+body.DarkMode .v[data-class='v'] .vcount,
+body.DarkMode .v[data-class='v'] .vcount .vnum,
+body.DarkMode pre code,
+body.DarkMode h1,
+body.DarkMode h2,
+body.DarkMode h3,
+body.DarkMode h4,
+body.DarkMode h5,
+body.DarkMode h6,
+body.DarkMode li,
+body.DarkMode p,
+body.DarkMode header .side-nav .mobile-head .logo-name,
+body.DarkMode header .side-nav .mobile-head .logo-desc,
+body.DarkMode header .side-nav .menu-list a,
+body.DarkMode .bg-cover .post-title,
+body.DarkMode.read .bg-cover .description {
+  color: rgba(255, 255, 255, 0.6);
+}
+/* 背景颜色变灰色 */
+body.DarkMode .card,
+body.DarkMode .block-with-text:after {
+  background-color: #282c34;
+}
+/* 背景颜色变黑色 */
+body.DarkMode,
+body.DarkMode .v[data-class='v'] .vcount,
+body.DarkMode #rewardModal .modal-content,
+body.DarkMode .modal,
+body.DarkMode header .side-nav,
+body.DarkMode header .side-nav .menu-list .m-nav-show {
+  background-color: #12121c;
+}
+/* 改变透明度 */
+body.DarkMode .aplayer {
+  background: #2f3742 !important;
+}
+body.DarkMode img,
+body.DarkMode strong {
+  filter: brightness(0.7);
+}
+/* 统计图滤镜 */
+body.DarkMode #post-calendar,
+body.DarkMode #category-radar,
+body.DarkMode #tags-chart,
+body.DarkMode #categories-chart,
+body.DarkMode #posts-chart {
+    filter: invert(1);
+}
+/*toc目录滤镜*/
+body.DarkMode .toc-widget{
+  filter: invert(1);
+}
+/* Skill bar text color */
+body.DarkMode .skillbar .skill-bar-percent {
+    color: #000;
+}
