@@ -2328,3 +2328,73 @@ body.DarkMode .toc-widget{
 body.DarkMode .skillbar .skill-bar-percent {
     color: #000;
 }
+
+/*文章列表卡片各样式*/ 
+#articles { 
+    margin-top: 10px; margin-bottom: 10px; 
+} 
+article a { 
+    margin-right: 0 !important; color: #525f7f; text-transform: none !important; 
+} 
+article a:hover { 
+    font-weight: bold; color: #116022; text-decoration: underline; 
+} 
+.articles .row { 
+    margin-left: 0; margin-right: 0; 
+} 
+article .card { 
+    border-radius: 8px; overflow: hidden; 
+} 
+article .card-image { 
+    font-family: Georgia, 'Noto Serif SC', Helvetica, Arial, Menlo, Monaco, monospace, serif; 
+    background-color: #222; border-radius: 8px; overflow: hidden; position: relative; z-index: 1; transition: all 0.5s; 
+} 
+article .card-image:hover { 
+    box-shadow: 3px 3px 5px #999; 
+} 
+article .card-image:before, article .card-image:after { 
+    content: ''; 
+    background: radial-gradient(circle at 23% 70%, rgba(255, 255, 255, 0.7), #fff 30%); 
+    width: 150%; height: 150%; opacity: 0; transform: rotate(45deg); 
+    position: absolute; /*top:-10.5%;*/ right: -150%; z-index: 1; transition: all 0.35s ease; 
+} 
+article .card-image:hover:before { 
+    opacity: 1; right: -85%; 
+} 
+article .card-image:hover:after { 
+    opacity: 1; top: -42%; 
+} 
+article .card-image img { 
+    width: 100%; transition: all 0.5s ease; height: 220px; border-radius: 0.3rem; opacity: 0.7; 
+} 
+article .card-image .x img { 
+    width: 100%; transition: all 0.5s ease; height: 230px; border-radius: 0.3rem; opacity: 0.7; 
+} 
+article .card-image:hover img { 
+    transform: scale(1.2); 
+} 
+article .card-image .box-content { 
+    text-align: right; transform: translateY(-50%); position: absolute; top: 50%; right: -100%; z-index: 2; transition: all 0.5s; 
+} 
+article .card-image:hover .box-content { 
+    right: 5%; 
+} 
+article .card-image:hover .box-content h3::before { 
+    content: 'X'; 
+} 
+article .card-image:hover .box-content h3::before { 
+    font-size: 0.9rem !important; vertical-align: bottom; 
+    margin-right: 0.5rem; padding: 2px; border-radius: 5px; background: hsl(0, 0%, 20%); color: hsl(0, 0%, 100%); 
+} 
+.card-image:hover .title-V { 
+    display: none; 
+} 
+article .card-image-V:before, article .card-image-V:after { top: -10.5%; }
+
+
+/* 友链对齐*/
+.frind-ship .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
