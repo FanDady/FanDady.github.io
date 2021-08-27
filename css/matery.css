@@ -230,6 +230,23 @@ mark {
     box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
 }
 
+/* 小花花背景图开始 */
+body.DarkMode .swbk, body.DarkMode .triangle, body.dark .v[data-class=v] .vwrap {
+    background: rgba(34,34,34,0.55)!important;
+}
+.v[data-class=v] .vwrap {
+    background-color: #fff;
+}
+.card
+{
+    background: url(/medias/banner/flowerbg-white.png) top fixed;
+}
+body.DarkMode .card
+{
+    background: url(/medias/banner/flowerbg-black.png) top fixed;
+}
+/* 小花花背景图结束 */
+
 .card .card-image img {
     border-radius: 8px 8px 0 0;
     /* 修改文章列表图片填充样式为 cover 以覆盖整个区域而不会被缩放 */
